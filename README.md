@@ -2,6 +2,9 @@
 
 O marketing de uma empresa de equipamentos esportivos quer criar um novo ciclocomputador e você foi escolhido como desenvolvedor autônomo, dado seu background técnico e de UX, para criar um protótipo e validar a ideia.
 
+### Cores
+A Utilização das cores é justificada de acordo com o padrão utilizado pela logomarca da empresa BiCycle Press. As fontes utilizadas são as padrões do próprio LCD, mantendo uma simplicidade e facilidade de leitura.
+
 Mais detalhes no site da disciplina:
 
 - https://insper.github.io/ComputacaoEmbarcada/navigation/APS/APS-2-Bike/Descricao/
