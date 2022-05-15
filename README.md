@@ -83,5 +83,7 @@ Nome da marca:
 - ![WhatsApp Image 2022-05-15 at 13 48 50](https://user-images.githubusercontent.com/62613979/168484617-ed4ed7b2-e565-4587-baeb-587b2250781d.jpeg)
 
 ### Imagem da proposta no LCD:
+![WhatsApp Image 2022-05-15 at 15 54 59](https://user-images.githubusercontent.com/62613979/168489411-9e1ce701-efd0-4bb2-ba36-3003515160f8.jpeg)
+![WhatsApp Image 2022-05-15 at 15 54 59 (1)](https://user-images.githubusercontent.com/62613979/168489414-2d3a4b9f-4fb8-476a-a37e-b6a6797836ee.jpeg)
 
-### Vídeo:
+### Vídeo: https://youtu.be/tQ5ABZWDSG4
