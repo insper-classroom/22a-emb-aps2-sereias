@@ -151,6 +151,7 @@ static void wheel_handler(lv_event_t * e) {
 	}
 }
 
+
 void lv_tela_1(void) {
 	static lv_style_t style;
 	lv_style_init(&style);
@@ -168,21 +169,21 @@ void lv_tela_1(void) {
 	lv_obj_add_event_cb(play_logo, play_handler, LV_EVENT_ALL, NULL);
 	lv_obj_align(play_logo, LV_ALIGN_BOTTOM_LEFT, 15, 60);
 	lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &playbtn, NULL, NULL);
-	lv_obj_add_style(play_logo, &style, 0);
+	lv_obj_add_style(play_logo, &style, LV_STATE_PRESSED);
 	
 	// -------------------- REPLAY BUTTON --------------------
 	
 	lv_obj_add_event_cb(replay_logo, replay_handler, LV_EVENT_ALL, NULL);
 	lv_obj_align_to(replay_logo, play_logo, LV_ALIGN_OUT_RIGHT_TOP, 0, 0);
 	lv_imgbtn_set_src(replay_logo, LV_IMGBTN_STATE_RELEASED, &replaybtn, NULL, NULL);
-	lv_obj_add_style(replay_logo, &style, 0);
+	lv_obj_add_style(replay_logo, &style, LV_STATE_PRESSED);
 	
 	// -------------------- WHEEL BUTTON --------------------
 	
 	lv_obj_add_event_cb(wheel_logo, replay_handler, LV_EVENT_ALL, NULL);
 	lv_obj_align_to(wheel_logo, replay_logo, LV_ALIGN_OUT_RIGHT_TOP, -35, 0);
 	lv_imgbtn_set_src(wheel_logo, LV_IMGBTN_STATE_RELEASED, &wheelbtn, NULL, NULL);
-	lv_obj_add_style(wheel_logo, &style, 0);
+	lv_obj_add_style(wheel_logo, &style, LV_STATE_PRESSED);
 	
 	// -------------------- CRONOMETRO IMG --------------------
 	
@@ -216,6 +217,7 @@ void lv_tela_1(void) {
 	lv_obj_set_style_text_font(labelClock, &dseg30, LV_STATE_DEFAULT);
 	lv_obj_set_style_text_color(labelClock, lv_color_black(), LV_STATE_DEFAULT);
 }
+
 
 /************************************************************************/
 /* TASKS                                                                */
