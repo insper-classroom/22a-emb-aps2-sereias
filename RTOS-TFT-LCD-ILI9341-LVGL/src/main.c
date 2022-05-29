@@ -13,6 +13,12 @@
 #include "wheelbtn.h"
 #include "cronometro.h"
 
+
+#define SIMULADOR_PIO      PIOA
+#define SIMULADOR_PIO_ID   ID_PIOA
+#define SIMULADOR_IDX  19
+#define SIMULADOR_IDX_MASK (1 << SIMULADOR_IDX)
+
 /************************************************************************/
 /* LCD / LVGL                                                           */
 /************************************************************************/
@@ -93,6 +99,13 @@ volatile uint32_t current_hour, current_min, current_sec;
 volatile uint32_t current_year, current_month, current_day, current_week;
 
 SemaphoreHandle_t xSemaphoreRTC;
+
+int t = 0;
+double dist = 0;
+double acel = 0;
+double vel_media = 0;
+double vel_anterior = 0;
+
 
 /********************* Prototypes **********************************************/
 void RTC_init(Rtc *rtc, uint32_t id_rtc, calendar t, uint32_t irq_type);
@@ -275,6 +288,7 @@ static void task_simulador(void *pvParameters) {
 
 
 
+
 static void task_RTC(void *pvParameters) {
 	calendar rtc_initial = {2018, 3, 19, 12, 15, 45 ,1};
 	RTC_init(RTC, ID_RTC, rtc_initial, RTC_SR_SEC|RTC_SR_ALARM);
@@ -294,6 +308,86 @@ static void task_RTC(void *pvParameters) {
 	
 }
 
+
+
+
+void RTT_Handler(void) {
+	uint32_t ul_status;
+
+	/* Get RTT status - ACK */
+	ul_status = rtt_get_status(RTT);
+
+	/* IRQ due to Time has changed */
+	if ((ul_status & RTT_SR_RTTINC) == RTT_SR_RTTINC) {
+		
+	}
+}
+
+void RTT_init(float freqPrescale, uint32_t IrqNPulses, uint32_t rttIRQSource) {
+
+	uint16_t pllPreScale = (int) (((float) 32768) / freqPrescale);
+	
+	rtt_sel_source(RTT, false);
+	rtt_init(RTT, pllPreScale);
+	
+	if (rttIRQSource & RTT_MR_ALMIEN) {
+		uint32_t ul_previous_time;
+		ul_previous_time = rtt_read_timer_value(RTT);
+		while (ul_previous_time == rtt_read_timer_value(RTT));
+		rtt_write_alarm_time(RTT, IrqNPulses+ul_previous_time);
+	}
+
+	/* config NVIC */
+	NVIC_DisableIRQ(RTT_IRQn);
+	NVIC_ClearPendingIRQ(RTT_IRQn);
+	NVIC_SetPriority(RTT_IRQn, 4);
+	NVIC_EnableIRQ(RTT_IRQn);
+
+	/* Enable RTT interrupt */
+	if (rttIRQSource & (RTT_MR_RTTINCIEN | RTT_MR_ALMIEN))
+	rtt_enable_interrupt(RTT, rttIRQSource);
+	else
+	rtt_disable_interrupt(RTT, RTT_MR_RTTINCIEN | RTT_MR_ALMIEN);
+	
+}
+
+void SIMULADOR_callback(void){
+	printf("DESCIDA\n");
+	if (t == 0) {
+		RTT_init(100, 0, RTT_MR_RTTINCIEN);
+		t = 1;
+		printf("Dando init no RTT...\n");
+	} else {
+		int pulsos = rtt_read_timer_value(RTT);
+		double tempo_s = pulsos/100.0;
+		double f = 1/(double)tempo_s;
+		double w = (2*PI*f);
+		//double w = 2*PI/T;  // vel angular
+		double v_metros = (RAIO*w); //vel linear em [m/s]
+		double v = (RAIO*w)*3.6; //vel linear em [km/h]
+
+		//dist += (v*tempo_s)/3.6;
+		dist += (2*PI*RAIO*pulsos)/1000.0; //era em metros, coloquei pra km
+		
+		acel = (v_metros - vel_anterior)/tempo_s ;// aceleração em metros/s^2
+		
+		
+		vel_anterior = v_metros;
+		
+		vel_media = (pulsos/tempo_s);
+		
+		printf("Tempo [s] %2.1f \n", tempo_s);
+		printf("VEL [km/h]: %2.1f \n", v);
+		printf("Distância [km]: %2.1f \n", dist);
+		printf("Aceleração [m/s^2]: %2.1f \n", acel);
+		printf("Velocidade média [km/h]: %2.1f \n", vel_media);
+		
+		
+		
+		RTT_init(100, 0, RTT_MR_RTTINCIEN);
+	}
+	
+}
 
 
 void RTC_Handler(void) {
@@ -340,6 +434,24 @@ void RTC_init(Rtc *rtc, uint32_t id_rtc, calendar t, uint32_t irq_type) {
 	/* Ativa interrupcao via alarme */
 	rtc_enable_interrupt(rtc,  irq_type);
 }
+
+void init(void) {
+	pmc_enable_periph_clk(SIMULADOR_PIO_ID);
+	pio_set_input(SIMULADOR_PIO,SIMULADOR_IDX_MASK,PIO_DEFAULT);
+	
+	pio_handler_set(SIMULADOR_PIO,
+	SIMULADOR_PIO_ID,
+	SIMULADOR_IDX_MASK,
+	PIO_IT_FALL_EDGE,
+	SIMULADOR_callback);
+	
+	pio_enable_interrupt(SIMULADOR_PIO, SIMULADOR_IDX_MASK);
+	pio_get_interrupt_status(SIMULADOR_PIO);
+	
+	NVIC_EnableIRQ(SIMULADOR_PIO_ID);
+	NVIC_SetPriority(SIMULADOR_PIO_ID, 4); // Prioridade 4
+}
+
 
 
 
@@ -428,6 +540,7 @@ int main(void) {
 	board_init();
 	sysclk_init();
 	configure_console();
+	init();
 
 	/* LCd, touch and lvgl init*/
 	configure_lcd();
