@@ -2267,13 +2267,31 @@
     <Compile Include="src\config\conf_touch.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\img1.h">
+    <Compile Include="src\cronometro.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\dseg20.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\dseg30.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\dseg35.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\playbtn.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\replaybtn.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\touch\touch.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\touch\touch.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\wheelbtn.h">
       <SubType>compile</SubType>
     </Compile>
     <None Include="src\ASF\sam\drivers\afec\afec.h">

@@ -7,7 +7,10 @@
 #include "ili9341.h"
 #include "lvgl.h"
 #include "touch/touch.h"
-#include "img1.h"
+#include "playbtn.h"
+#include "replaybtn.h"
+#include "wheelbtn.h"
+#include "cronometro.h"
 
 /************************************************************************/
 /* LCD / LVGL                                                           */
@@ -16,13 +19,25 @@
 #define LV_HOR_RES_MAX          (320)
 #define LV_VER_RES_MAX          (240)
 
-/*A static or global variable to store the buffers*/
-static lv_disp_draw_buf_t disp_buf;
+LV_FONT_DECLARE(dseg20);
+LV_FONT_DECLARE(dseg30);
+LV_FONT_DECLARE(dseg35);
 
-/*Static or global buffer(s). The second buffer is optional*/
+static lv_disp_draw_buf_t disp_buf;
 static lv_color_t buf_1[LV_HOR_RES_MAX * LV_VER_RES_MAX];
-static lv_disp_drv_t disp_drv;          /*A variable to hold the drivers. Must be static or global.*/
+static lv_disp_drv_t disp_drv; 
 static lv_indev_drv_t indev_drv;
+
+static lv_obj_t * labelPlay;
+static lv_obj_t * labelReplay;
+static lv_obj_t * labelWheel;
+static lv_obj_t * labelCron;
+static lv_obj_t * labelDist;
+
+
+volatile int play_clicked = 0;
+volatile int replay_clicked = 0;
+volatile int wheel_clicked = 0;
 
 /************************************************************************/
 /* RTOS                                                                 */
@@ -54,37 +69,111 @@ extern void vApplicationMallocFailedHook(void) {
 /* lvgl                                                                 */
 /************************************************************************/
 
-static void event_handler(lv_event_t * e) {
+static void play_handler(lv_event_t * e) {
 	lv_event_code_t code = lv_event_get_code(e);
 
 	if(code == LV_EVENT_CLICKED) {
 		LV_LOG_USER("Clicked");
+		if (play_clicked == 0){
+			play_clicked = 1;
+			} else {
+			play_clicked = 0;
+		}
 	}
 	else if(code == LV_EVENT_VALUE_CHANGED) {
 		LV_LOG_USER("Toggled");
 	}
 }
 
-void lv_ex_btn_1(void) {
-	lv_obj_t * label;
+static void replay_handler(lv_event_t * e) {
+	lv_event_code_t code = lv_event_get_code(e);
 
-	lv_obj_t * btn1 = lv_btn_create(lv_scr_act());
-	lv_obj_add_event_cb(btn1, event_handler, LV_EVENT_ALL, NULL);
-	lv_obj_align(btn1, LV_ALIGN_CENTER, 0, -40);
+	if(code == LV_EVENT_CLICKED) {
+		LV_LOG_USER("Clicked");
+		if (replay_clicked == 0){
+			replay_clicked = 1;
+			} else {
+			replay_clicked = 0;
+		}
+	}
+	else if(code == LV_EVENT_VALUE_CHANGED) {
+		LV_LOG_USER("Toggled");
+	}
+}
 
-	label = lv_label_create(btn1);
-	lv_label_set_text(label, "Corsi");
-	lv_obj_center(label);
+static void wheel_handler(lv_event_t * e) {
+	lv_event_code_t code = lv_event_get_code(e);
 
-	lv_obj_t * btn2 = lv_btn_create(lv_scr_act());
-	lv_obj_add_event_cb(btn2, event_handler, LV_EVENT_ALL, NULL);
-	lv_obj_align(btn2, LV_ALIGN_CENTER, 0, 40);
-	lv_obj_add_flag(btn2, LV_OBJ_FLAG_CHECKABLE);
-	lv_obj_set_height(btn2, LV_SIZE_CONTENT);
+	if(code == LV_EVENT_CLICKED) {
+		LV_LOG_USER("Clicked");
+		if (wheel_clicked == 0){
+			wheel_clicked = 1;
+			} else {
+			wheel_clicked = 0;
+		}
+	}
+	else if(code == LV_EVENT_VALUE_CHANGED) {
+		LV_LOG_USER("Toggled");
+	}
+}
 
-	label = lv_label_create(btn2);
-	lv_label_set_text(label, "Toggle");
-	lv_obj_center(label);
+void lv_tela_1(void) {
+	static lv_style_t style;
+	lv_style_init(&style);
+	lv_style_set_bg_color(&style, lv_color_white());
+	
+	// -------------------- BUTTON INITS --------------------
+	
+	lv_obj_t * play_logo = lv_imgbtn_create(lv_scr_act());
+	lv_obj_t * replay_logo = lv_imgbtn_create(lv_scr_act());
+	lv_obj_t * wheel_logo = lv_imgbtn_create(lv_scr_act());
+	lv_obj_t * cronometro_img = lv_img_create(lv_scr_act());
+	
+	// -------------------- PLAY BUTTON --------------------
+
+	lv_obj_add_event_cb(play_logo, play_handler, LV_EVENT_ALL, NULL);
+	lv_obj_align(play_logo, LV_ALIGN_BOTTOM_LEFT, 15, 60);
+	lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &playbtn, NULL, NULL);
+	lv_obj_add_style(play_logo, &style, 0);
+	
+	// -------------------- REPLAY BUTTON --------------------
+	
+	lv_obj_add_event_cb(replay_logo, replay_handler, LV_EVENT_ALL, NULL);
+	lv_obj_align_to(replay_logo, play_logo, LV_ALIGN_OUT_RIGHT_TOP, 0, 0);
+	lv_imgbtn_set_src(replay_logo, LV_IMGBTN_STATE_RELEASED, &replaybtn, NULL, NULL);
+	lv_obj_add_style(replay_logo, &style, 0);
+	
+	// -------------------- WHEEL BUTTON --------------------
+	
+	lv_obj_add_event_cb(wheel_logo, replay_handler, LV_EVENT_ALL, NULL);
+	lv_obj_align_to(wheel_logo, replay_logo, LV_ALIGN_OUT_RIGHT_TOP, -35, 0);
+	lv_imgbtn_set_src(wheel_logo, LV_IMGBTN_STATE_RELEASED, &wheelbtn, NULL, NULL);
+	lv_obj_add_style(wheel_logo, &style, 0);
+	
+	// -------------------- CRONOMETRO IMG --------------------
+	
+	lv_img_set_src(cronometro_img, &cronometro);
+	lv_obj_align(cronometro_img, LV_ALIGN_LEFT_MID, 15, 0);
+	
+	// -------------------- CRONOMETRO LABEL --------------------
+	
+	labelCron = lv_label_create(lv_scr_act());
+	lv_obj_align(labelCron, LV_ALIGN_LEFT_MID, 85 , 0);
+	lv_obj_set_style_text_font(labelCron, &dseg30, LV_STATE_DEFAULT);
+	lv_obj_set_style_text_color(labelCron, lv_color_black(), LV_STATE_DEFAULT);
+	lv_label_set_text_fmt(labelCron, "%02d:%02d", 01,54);
+	lv_obj_add_style(labelCron, &style, 0);
+	
+	// -------------------- DIST LABEL --------------------
+	
+	labelDist = lv_label_create(lv_scr_act());
+	lv_obj_align(labelDist, LV_ALIGN_RIGHT_MID, -40 , 0);
+	lv_obj_set_style_text_font(labelDist, &dseg30, LV_STATE_DEFAULT);
+	lv_obj_set_style_text_color(labelDist, lv_color_black(), LV_STATE_DEFAULT);
+	lv_label_set_text_fmt(labelDist, "%02d", 12); // FALTA ADICIONAR O "KM" AQUI!! e RECOMENDO FAZER UMA DSEG25 PRA CÁ!
+	lv_obj_add_style(labelDist, &style, 0);
+
+	lv_obj_clear_flag(lv_scr_act(), LV_OBJ_FLAG_SCROLLABLE);
 }
 
 /************************************************************************/
@@ -94,11 +183,7 @@ void lv_ex_btn_1(void) {
 static void task_lcd(void *pvParameters) {
 	int px, py;
 
-	//lv_ex_btn_1();
-	
-	lv_obj_t * img = lv_img_create(lv_scr_act());
-	lv_img_set_src(img, &img1);
-	lv_obj_align(img, LV_ALIGN_CENTER, 0, 0);
+	lv_tela_1();
 
 	for (;;)  {
 		lv_tick_inc(50);
