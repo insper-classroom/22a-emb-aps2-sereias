@@ -6,6 +6,7 @@
 #include <string.h>
 #include "ili9341.h"
 #include "lvgl.h"
+#include "arm_math.h"
 #include "touch/touch.h"
 #include "playbtn.h"
 #include "replaybtn.h"
@@ -18,6 +19,12 @@
 
 #define LV_HOR_RES_MAX          (320)
 #define LV_VER_RES_MAX          (240)
+//#define RAMP
+
+#define RAIO 0.58/2
+#define VEL_MAX_KMH  5.0f
+#define VEL_MIN_KMH  1.0f
+
 
 LV_FONT_DECLARE(dseg20);
 LV_FONT_DECLARE(dseg30);
@@ -33,6 +40,7 @@ static lv_obj_t * labelReplay;
 static lv_obj_t * labelWheel;
 static lv_obj_t * labelCron;
 static lv_obj_t * labelDist;
+static 	lv_obj_t * labelClock;
 
 
 volatile int play_clicked = 0;
@@ -45,6 +53,9 @@ volatile int wheel_clicked = 0;
 
 #define TASK_LCD_STACK_SIZE                (1024*6/sizeof(portSTACK_TYPE))
 #define TASK_LCD_STACK_PRIORITY            (tskIDLE_PRIORITY)
+
+#define TASK_RTC_STACK_SIZE (4096 / sizeof(portSTACK_TYPE))
+#define TASK_RTC_STACK_PRIORITY (tskIDLE_PRIORITY)
 
 extern void vApplicationStackOverflowHook(xTaskHandle *pxTask,  signed char *pcTaskName);
 extern void vApplicationIdleHook(void);
@@ -64,6 +75,29 @@ extern void vApplicationTickHook(void) { }
 extern void vApplicationMallocFailedHook(void) {
 	configASSERT( ( volatile void * ) NULL );
 }
+
+/***************** Globais ***************************/
+
+typedef struct  {
+	uint32_t year;
+	uint32_t month;
+	uint32_t day;
+	uint32_t week;
+	uint32_t hour;
+	uint32_t minute;
+	uint32_t second;
+} calendar;
+
+
+volatile uint32_t current_hour, current_min, current_sec;
+volatile uint32_t current_year, current_month, current_day, current_week;
+
+SemaphoreHandle_t xSemaphoreRTC;
+
+/********************* Prototypes **********************************************/
+void RTC_init(Rtc *rtc, uint32_t id_rtc, calendar t, uint32_t irq_type);
+void RTC_Handler(void);
+
 
 /************************************************************************/
 /* lvgl                                                                 */
@@ -171,9 +205,16 @@ void lv_tela_1(void) {
 	lv_obj_set_style_text_font(labelDist, &dseg30, LV_STATE_DEFAULT);
 	lv_obj_set_style_text_color(labelDist, lv_color_black(), LV_STATE_DEFAULT);
 	lv_label_set_text_fmt(labelDist, "%02d", 12); // FALTA ADICIONAR O "KM" AQUI!! e RECOMENDO FAZER UMA DSEG25 PRA CÁ!
+	
 	lv_obj_add_style(labelDist, &style, 0);
 
 	lv_obj_clear_flag(lv_scr_act(), LV_OBJ_FLAG_SCROLLABLE);
+	
+	// ----------------------- RELÓGIO LABEL ---------------------------------
+	labelClock = lv_label_create(lv_scr_act());
+	lv_obj_align(labelClock, LV_ALIGN_RIGHT_MID, -20 , -100);
+	lv_obj_set_style_text_font(labelClock, &dseg30, LV_STATE_DEFAULT);
+	lv_obj_set_style_text_color(labelClock, lv_color_black(), LV_STATE_DEFAULT);
 }
 
 /************************************************************************/
@@ -191,6 +232,114 @@ static void task_lcd(void *pvParameters) {
 		vTaskDelay(50);
 	}
 }
+
+
+float kmh_to_hz(float vel, float raio) {
+	float f = vel / (2*PI*raio*3.8);
+	return(f);
+}
+
+static void task_simulador(void *pvParameters) {
+
+	pio_set_output(PIOC, PIO_PC31, 1, 0, 0);
+
+	float vel = VEL_MAX_KMH;
+	float f;
+	int ramp_up = 1;
+
+	while(1){
+		pio_clear(PIOC, PIO_PC31);
+		delay_ms(5);
+		pio_set(PIOC, PIO_PC31);
+		#ifdef RAMP
+		if (ramp_up) {
+			printf("[SIMU] ACELERANDO %d \n", (int) (10*vel));
+			vel += 0.3;
+			} else {
+			printf("[SIMU] DESACELERANDO %d \n",  (int) (10*vel));
+			vel -= 0.3;
+		}
+
+		if (vel > VEL_MAX_KMH)
+		ramp_up = 0;
+		else if (vel < VEL_MIN_KMH)
+		ramp_up = 1;
+		#endif
+		f = kmh_to_hz(vel, RAIO);
+		int t = 1000*(1.0/f);
+		delay_ms(t);
+	}
+}
+
+
+
+static void task_RTC(void *pvParameters) {
+	calendar rtc_initial = {2018, 3, 19, 12, 15, 45 ,1};
+	RTC_init(RTC, ID_RTC, rtc_initial, RTC_SR_SEC|RTC_SR_ALARM);
+
+	//xSemaphoreTake(xSemaphoreRTC, 1000
+	for (;;) {
+		rtc_get_time(RTC, &current_hour,&current_min, &current_sec);
+
+		/* aguarda por tempo inderteminado até a liberacao do semaforo */
+		if (xSemaphoreTake(xSemaphoreRTC, 1000 / portTICK_PERIOD_MS)){
+			lv_label_set_text_fmt(labelClock, "%02d:%02d", current_hour, current_min);
+			} else {
+			lv_label_set_text_fmt(labelClock, "%02d %02d", current_hour, current_min);
+		}
+		
+	}
+	
+}
+
+
+
+void RTC_Handler(void) {
+	uint32_t ul_status = rtc_get_status(RTC);
+	
+	/* seccond tick */
+	if ((ul_status & RTC_SR_SEC) == RTC_SR_SEC) {
+		BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+		xSemaphoreGiveFromISR(xSemaphoreRTC, &xHigherPriorityTaskWoken);
+		
+	}
+	
+	/* Time or date alarm */
+	if ((ul_status & RTC_SR_ALARM) == RTC_SR_ALARM) {
+		// o código para irq de alame vem aqui
+	}
+
+	rtc_clear_status(RTC, RTC_SCCR_SECCLR);
+	rtc_clear_status(RTC, RTC_SCCR_ALRCLR);
+	rtc_clear_status(RTC, RTC_SCCR_ACKCLR);
+	rtc_clear_status(RTC, RTC_SCCR_TIMCLR);
+	rtc_clear_status(RTC, RTC_SCCR_CALCLR);
+	rtc_clear_status(RTC, RTC_SCCR_TDERRCLR);
+}
+
+
+void RTC_init(Rtc *rtc, uint32_t id_rtc, calendar t, uint32_t irq_type) {
+	/* Configura o PMC */
+	pmc_enable_periph_clk(ID_RTC);
+
+	/* Default RTC configuration, 24-hour mode */
+	rtc_set_hour_mode(rtc, 0);
+
+	/* Configura data e hora manualmente */
+	rtc_set_date(rtc, t.year, t.month, t.day, t.week);
+	rtc_set_time(rtc, t.hour, t.minute, t.second);
+
+	/* Configure RTC interrupts */
+	NVIC_DisableIRQ(id_rtc);
+	NVIC_ClearPendingIRQ(id_rtc);
+	NVIC_SetPriority(id_rtc, 4);
+	NVIC_EnableIRQ(id_rtc);
+
+	/* Ativa interrupcao via alarme */
+	rtc_enable_interrupt(rtc,  irq_type);
+}
+
+
 
 /************************************************************************/
 /* configs                                                              */
@@ -282,11 +431,24 @@ int main(void) {
 	configure_lcd();
 	configure_touch();
 	configure_lvgl();
+	
+	xSemaphoreRTC = xSemaphoreCreateBinary();
+	if (xSemaphoreRTC == NULL)
+	printf("falha em criar o semaforo \n");	
 
 	/* Create task to control oled */
 	if (xTaskCreate(task_lcd, "LCD", TASK_LCD_STACK_SIZE, NULL, TASK_LCD_STACK_PRIORITY, NULL) != pdPASS) {
 		printf("Failed to create lcd task\r\n");
 	}
+
+	if (xTaskCreate(task_simulador, "Simulador", TASK_LCD_STACK_SIZE, NULL, TASK_LCD_STACK_PRIORITY, NULL) != pdPASS) {
+		printf("Failed to create simulador task\r\n");
+	}
+	
+	if (xTaskCreate(task_RTC, "RTC", TASK_RTC_STACK_SIZE, NULL, TASK_RTC_STACK_PRIORITY, NULL) != pdPASS) {
+		printf("Failed to create test led task\r\n");
+	}
+		
 	
 	/* Start the scheduler. */
 	vTaskStartScheduler();
