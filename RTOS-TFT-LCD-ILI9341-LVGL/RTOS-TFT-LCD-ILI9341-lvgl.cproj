@@ -43,8 +43,9 @@
     <option id="sam.drivers.mpu" value="Add" config="" content-id="Atmel.ASF" />
     <option id="sam.drivers.pio" value="Add" config="" content-id="Atmel.ASF" />
     <option id="sam.drivers.rtc" value="Add" config="" content-id="Atmel.ASF" />
-    <option id="thirdparty.os.freertos.version" value="Add" config="8.2.3" content-id="Atmel.ASF" />
     <option id="sam.drivers.rtt" value="Add" config="" content-id="Atmel.ASF" />
+    <option id="thirdparty.os.freertos.version" value="Add" config="8.2.3" content-id="Atmel.ASF" />
+    <option id="sam.drivers.tc" value="Add" config="" content-id="Atmel.ASF" />
     <option id="common.components.touch.mxt.example_usart" value="Add" config="" content-id="Atmel.ASF" />
     <option id="sam.utils.cmsis.same70.source.template" value="Add" config="" content-id="Atmel.ASF" />
   </options>
@@ -318,6 +319,8 @@
     <file path="src/ASF/sam/drivers/rtc/rtc.c" framework="" version="3.42.0" source="sam\drivers\rtc\rtc.c" changed="False" content-id="Atmel.ASF" />
     <file path="src/ASF/sam/drivers/rtt/rtt.c" framework="" version="3.42.0" source="sam\drivers\rtt\rtt.c" changed="False" content-id="Atmel.ASF" />
     <file path="src/ASF/sam/drivers/rtt/rtt.h" framework="" version="3.42.0" source="sam\drivers\rtt\rtt.h" changed="False" content-id="Atmel.ASF" />
+    <file path="src/ASF/sam/drivers/tc/tc.c" framework="" version="3.42.0" source="sam\drivers\tc\tc.c" changed="False" content-id="Atmel.ASF" />
+    <file path="src/ASF/sam/drivers/tc/tc.h" framework="" version="3.42.0" source="sam\drivers\tc\tc.h" changed="False" content-id="Atmel.ASF" />
   </files>
   <documentation help="http://asf.atmel.com/docs/3.40.0/common.components.touch.mxt.example_usart.same70_xplained/html/index.html" />
   <offline-documentation help="" />
@@ -403,6 +406,7 @@
       <Value>../src/ASF/common/services/twi</Value>
       <Value>../src/ASF/sam/drivers/rtc</Value>
       <Value>../src/ASF/sam/drivers/rtt</Value>
+      <Value>../src/ASF/sam/drivers/tc</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.level>Optimize for size (-Os)</armgcc.compiler.optimization.level>
@@ -462,6 +466,7 @@
       <Value>../src/ASF/common/services/twi</Value>
       <Value>../src/ASF/sam/drivers/rtc</Value>
       <Value>../src/ASF/sam/drivers/rtt</Value>
+      <Value>../src/ASF/sam/drivers/tc</Value>
     </ListValues>
   </armgcc.assembler.general.IncludePaths>
   <armgcc.preprocessingassembler.general.AssemblerFlags>-DARM_MATH_CM7=true -DBOARD=SAME70_XPLAINED -D__SAME70Q21B__ -Dprintf=iprintf -Dscanf=iscanf -D__FREERTOS__</armgcc.preprocessingassembler.general.AssemblerFlags>
@@ -504,6 +509,7 @@
       <Value>../src/ASF/common/services/twi</Value>
       <Value>../src/ASF/sam/drivers/rtc</Value>
       <Value>../src/ASF/sam/drivers/rtt</Value>
+      <Value>../src/ASF/sam/drivers/tc</Value>
     </ListValues>
   </armgcc.preprocessingassembler.general.IncludePaths>
 </ArmGcc>
@@ -569,6 +575,7 @@
       <Value>../src/ASF/common/services/twi</Value>
       <Value>../src/ASF/sam/drivers/rtc</Value>
       <Value>../src/ASF/sam/drivers/rtt</Value>
+      <Value>../src/ASF/sam/drivers/tc</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.level>Optimize (-O1)</armgcc.compiler.optimization.level>
@@ -630,6 +637,7 @@
       <Value>../src/ASF/common/services/twi</Value>
       <Value>../src/ASF/sam/drivers/rtc</Value>
       <Value>../src/ASF/sam/drivers/rtt</Value>
+      <Value>../src/ASF/sam/drivers/tc</Value>
     </ListValues>
   </armgcc.assembler.general.IncludePaths>
   <armgcc.assembler.debugging.DebugLevel>Default (-g)</armgcc.assembler.debugging.DebugLevel>
@@ -673,6 +681,7 @@
       <Value>../src/ASF/common/services/twi</Value>
       <Value>../src/ASF/sam/drivers/rtc</Value>
       <Value>../src/ASF/sam/drivers/rtt</Value>
+      <Value>../src/ASF/sam/drivers/tc</Value>
     </ListValues>
   </armgcc.preprocessingassembler.general.IncludePaths>
   <armgcc.preprocessingassembler.debugging.DebugLevel>Default (-Wa,-g)</armgcc.preprocessingassembler.debugging.DebugLevel>
@@ -723,6 +732,7 @@
     <Folder Include="src\ASF\sam\drivers\rtc\" />
     <Folder Include="src\ASF\sam\drivers\rtt\" />
     <Folder Include="src\ASF\sam\drivers\spi\" />
+    <Folder Include="src\ASF\sam\drivers\tc\" />
     <Folder Include="src\ASF\sam\drivers\twihs\" />
     <Folder Include="src\ASF\sam\drivers\uart\" />
     <Folder Include="src\ASF\sam\drivers\usart\" />
@@ -886,6 +896,12 @@
       <SubType>compile</SubType>
     </Compile>
     <None Include="src\ASF\sam\drivers\rtt\rtt.h">
+      <SubType>compile</SubType>
+    </None>
+    <Compile Include="src\ASF\sam\drivers\tc\tc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <None Include="src\ASF\sam\drivers\tc\tc.h">
       <SubType>compile</SubType>
     </None>
     <Compile Include="src\ASF\thirdparty\lvgl8\examples\anim\lv_example_anim.h">

@@ -197,7 +197,8 @@ src/main.d src/main.o: ../src/main.c ../src/asf.h \
  ../src/ASF/common/services/serial/serial.h \
  ../src/ASF/common/services/serial/sam_uart/uart_serial.h \
  ../src/ASF/sam/drivers/uart/uart.h ../src/ASF/sam/drivers/usart/usart.h \
- ../src/config/conf_uart_serial.h ../src/ASF/sam/drivers/twihs/twihs.h \
+ ../src/config/conf_uart_serial.h ../src/ASF/sam/drivers/tc/tc.h \
+ ../src/ASF/sam/drivers/twihs/twihs.h \
  ../src/ASF/common/services/twi/sam_twihs/twihs_master.h \
  ../src/ASF/common/services/twi/sam_twihs/twihs_slave.h \
  ../src/ASF/common/services/twi/twihs_master.h \
@@ -831,6 +832,8 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-no
 ../src/ASF/sam/drivers/usart/usart.h:
 
 ../src/config/conf_uart_serial.h:
+
+../src/ASF/sam/drivers/tc/tc.h:
 
 ../src/ASF/sam/drivers/twihs/twihs.h:
 

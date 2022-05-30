@@ -63,6 +63,9 @@ volatile int wheel_clicked = 0;
 #define TASK_RTC_STACK_SIZE (4096 / sizeof(portSTACK_TYPE))
 #define TASK_RTC_STACK_PRIORITY (tskIDLE_PRIORITY)
 
+#define TASK_TC_STACK_SIZE (4096 / sizeof(portSTACK_TYPE))
+#define TASK_TC_STACK_PRIORITY (tskIDLE_PRIORITY)
+
 extern void vApplicationStackOverflowHook(xTaskHandle *pxTask,  signed char *pcTaskName);
 extern void vApplicationIdleHook(void);
 extern void vApplicationTickHook(void);
@@ -97,8 +100,10 @@ typedef struct  {
 
 volatile uint32_t current_hour, current_min, current_sec;
 volatile uint32_t current_year, current_month, current_day, current_week;
+volatile uint32_t alarm_sec, alarm_h, alarm_min;
 
 SemaphoreHandle_t xSemaphoreRTC;
+SemaphoreHandle_t xSemaphoreTC;
 
 int t = 0;
 double dist = 0;
@@ -110,7 +115,7 @@ double vel_anterior = 0;
 /********************* Prototypes **********************************************/
 void RTC_init(Rtc *rtc, uint32_t id_rtc, calendar t, uint32_t irq_type);
 void RTC_Handler(void);
-
+void TC_init(Tc * TC, int ID_TC, int TC_CHANNEL, int freq);
 
 /************************************************************************/
 /* lvgl                                                                 */
@@ -209,7 +214,7 @@ void lv_tela_1(void) {
 	lv_obj_align(labelCron, LV_ALIGN_LEFT_MID, 85 , 0);
 	lv_obj_set_style_text_font(labelCron, &dseg30, LV_STATE_DEFAULT);
 	lv_obj_set_style_text_color(labelCron, lv_color_black(), LV_STATE_DEFAULT);
-	lv_label_set_text_fmt(labelCron, "%02d:%02d", 01,54);
+	//lv_label_set_text_fmt(labelCron, "%02d:%02d", 01,54);
 	lv_obj_add_style(labelCron, &style, 0);
 	
 	// -------------------- DIST LABEL --------------------
@@ -218,7 +223,6 @@ void lv_tela_1(void) {
 	lv_obj_align(labelDist, LV_ALIGN_RIGHT_MID, -40 , 0);
 	lv_obj_set_style_text_font(labelDist, &dseg30, LV_STATE_DEFAULT);
 	lv_obj_set_style_text_color(labelDist, lv_color_black(), LV_STATE_DEFAULT);
-	lv_label_set_text_fmt(labelDist, "%02d", 12); // FALTA ADICIONAR O "KM" AQUI!! e RECOMENDO FAZER UMA DSEG25 PRA CÁ!
 	
 	lv_obj_add_style(labelDist, &style, 0);
 
@@ -229,6 +233,7 @@ void lv_tela_1(void) {
 	lv_obj_align(labelClock, LV_ALIGN_RIGHT_MID, -20 , -100);
 	lv_obj_set_style_text_font(labelClock, &dseg30, LV_STATE_DEFAULT);
 	lv_obj_set_style_text_color(labelClock, lv_color_black(), LV_STATE_DEFAULT);
+	
 }
 
 
@@ -309,6 +314,74 @@ static void task_RTC(void *pvParameters) {
 }
 
 
+static void task_TC(void *pvParameters) {
+	TC_init(TC0, ID_TC1, 1, 1);
+	tc_start(TC0, 1);
+
+	//xSemaphoreTake(xSemaphoreRTC, 1000
+	for (;;) {
+		//rtc_get_time(RTC, &current_hour,&current_min, &current_sec);
+
+		/* aguarda por tempo inderteminado até a liberacao do semaforo */
+		if (xSemaphoreTake(xSemaphoreTC, 1000 / portTICK_PERIOD_MS)){
+			lv_label_set_text_fmt(labelCron, "%02d:%02d", alarm_h, alarm_min);
+		} else {
+			lv_label_set_text_fmt(labelCron, "%02d %02d", alarm_h, alarm_min);
+		}
+		
+	}
+	
+}
+
+
+void TC1_Handler(void) {
+	/**
+	* Devemos indicar ao TC que a interrupção foi satisfeita.
+	* Isso é realizado pela leitura do status do periférico
+	**/
+	volatile uint32_t status = tc_get_status(TC0, 1);
+
+	/** Muda o estado do LED (pisca) **/
+		
+	if (alarm_sec == 59 && alarm_min != 59){
+		alarm_min += 1;
+		alarm_sec = 0;
+	} if (alarm_min == 59 && alarm_sec == 59) {
+		alarm_h += 1; 
+		alarm_min = 0;
+		alarm_sec = 0;
+	}
+	else{
+		alarm_sec += 1;
+	}
+	
+	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+	xSemaphoreGiveFromISR(xSemaphoreTC, &xHigherPriorityTaskWoken);
+
+}
+
+
+
+void TC_init(Tc * TC, int ID_TC, int TC_CHANNEL, int freq){
+	uint32_t ul_div;
+	uint32_t ul_tcclks;
+	uint32_t ul_sysclk = sysclk_get_cpu_hz();
+
+	/* Configura o PMC */
+	pmc_enable_periph_clk(ID_TC);
+
+	/** Configura o TC para operar em  freq hz e interrupçcão no RC compare */
+	tc_find_mck_divisor(freq, ul_sysclk, &ul_div, &ul_tcclks, ul_sysclk);
+	tc_init(TC, TC_CHANNEL, ul_tcclks | TC_CMR_CPCTRG);
+	tc_write_rc(TC, TC_CHANNEL, (ul_sysclk / ul_div) / freq);
+
+	/* Configura NVIC*/
+	NVIC_SetPriority(ID_TC, 4);
+	NVIC_EnableIRQ((IRQn_Type) ID_TC);
+	tc_enable_interrupt(TC, TC_CHANNEL, TC_IER_CPCS);
+}
+
+
 
 
 void RTT_Handler(void) {
@@ -368,7 +441,8 @@ void SIMULADOR_callback(void){
 
 		//dist += (v*tempo_s)/3.6;
 		dist += (2*PI*RAIO*pulsos)/1000.0; //era em metros, coloquei pra km
-		
+		lv_label_set_text_fmt(labelDist, "%.1f km", dist); // FALTA ADICIONAR O "KM" AQUI!! e RECOMENDO FAZER UMA DSEG25 PRA CÁ!
+
 		acel = (v_metros - vel_anterior)/tempo_s ;// aceleração em metros/s^2
 		
 		
@@ -551,6 +625,10 @@ int main(void) {
 	if (xSemaphoreRTC == NULL)
 	printf("falha em criar o semaforo \n");	
 
+	xSemaphoreTC = xSemaphoreCreateBinary();
+	if (xSemaphoreTC == NULL)
+	printf("falha em criar o semaforo \n");
+
 	/* Create task to control oled */
 	if (xTaskCreate(task_lcd, "LCD", TASK_LCD_STACK_SIZE, NULL, TASK_LCD_STACK_PRIORITY, NULL) != pdPASS) {
 		printf("Failed to create lcd task\r\n");
@@ -563,7 +641,10 @@ int main(void) {
 	if (xTaskCreate(task_RTC, "RTC", TASK_RTC_STACK_SIZE, NULL, TASK_RTC_STACK_PRIORITY, NULL) != pdPASS) {
 		printf("Failed to create test led task\r\n");
 	}
-		
+
+	if (xTaskCreate(task_TC, "TC", TASK_TC_STACK_SIZE, NULL, TASK_TC_STACK_PRIORITY, NULL) != pdPASS) {
+		printf("Failed to create test led task\r\n");
+	}		
 	
 	/* Start the scheduler. */
 	vTaskStartScheduler();
