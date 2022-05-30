@@ -100,6 +100,8 @@ typedef struct  {
 	uint32_t second;
 } calendar;
 
+static lv_obj_t * scr1;  // screen 1
+static lv_obj_t * scr2;  // screen 2
 
 volatile uint32_t current_hour, current_min, current_sec;
 volatile uint32_t current_year, current_month, current_day, current_week;
@@ -141,7 +143,6 @@ static void play_handler(lv_event_t * e) {
 	}
 }
 
-
 static void replay_handler(lv_event_t * e) {
 	lv_event_code_t code = lv_event_get_code(e);
 
@@ -163,9 +164,7 @@ static void wheel_handler(lv_event_t * e) {
 		LV_LOG_USER("Clicked");
 		if (wheel_clicked == 0){
 			wheel_clicked = 1;
-			} else {
-			wheel_clicked = 0;
-		}
+		} 
 	}
 	else if(code == LV_EVENT_VALUE_CHANGED) {
 		LV_LOG_USER("Toggled");
@@ -173,17 +172,17 @@ static void wheel_handler(lv_event_t * e) {
 }
 
 
-void lv_tela_1(void) {
+void create_scr(lv_obj_t * screen) {
 	static lv_style_t style;
 	lv_style_init(&style);
 	lv_style_set_bg_color(&style, lv_color_white());
 	
 	// -------------------- BUTTON INITS --------------------
 	
-	lv_obj_t * play_logo = lv_imgbtn_create(lv_scr_act());
-	lv_obj_t * replay_logo = lv_imgbtn_create(lv_scr_act());
-	lv_obj_t * wheel_logo = lv_imgbtn_create(lv_scr_act());
-	lv_obj_t * cronometro_img = lv_img_create(lv_scr_act());
+	lv_obj_t * play_logo = lv_imgbtn_create(scr1);
+	lv_obj_t * replay_logo = lv_imgbtn_create(scr1);
+	lv_obj_t * wheel_logo = lv_imgbtn_create(scr1);
+	lv_obj_t * cronometro_img = lv_img_create(scr1);
 	
 	// -------------------- PLAY BUTTON --------------------
 	
@@ -202,7 +201,7 @@ void lv_tela_1(void) {
 	
 	// -------------------- WHEEL BUTTON --------------------
 	
-	lv_obj_add_event_cb(wheel_logo, replay_handler, LV_EVENT_ALL, NULL);
+	lv_obj_add_event_cb(wheel_logo, wheel_handler, LV_EVENT_ALL, NULL);
 	lv_obj_align_to(wheel_logo, replay_logo, LV_ALIGN_OUT_RIGHT_TOP, -35, 0);
 	lv_imgbtn_set_src(wheel_logo, LV_IMGBTN_STATE_RELEASED, &wheelbtn, NULL, NULL);
 	lv_obj_add_style(wheel_logo, &style, LV_STATE_PRESSED);
@@ -214,7 +213,7 @@ void lv_tela_1(void) {
 	
 	// -------------------- CRONOMETRO LABEL --------------------
 	
-	labelCron = lv_label_create(lv_scr_act());
+	labelCron = lv_label_create(scr1);
 	lv_obj_align(labelCron, LV_ALIGN_LEFT_MID, 85 , 0);
 	lv_obj_set_style_text_font(labelCron, &dseg30, LV_STATE_DEFAULT);
 	lv_obj_set_style_text_color(labelCron, lv_color_black(), LV_STATE_DEFAULT);
@@ -223,7 +222,7 @@ void lv_tela_1(void) {
 	
 	// -------------------- DIST LABEL --------------------
 	
-	labelDist = lv_label_create(lv_scr_act());
+	labelDist = lv_label_create(scr1);
 	lv_obj_align(labelDist, LV_ALIGN_RIGHT_MID, -40 , 0);
 	lv_obj_set_style_text_font(labelDist, &dseg30, LV_STATE_DEFAULT);
 	lv_obj_set_style_text_color(labelDist, lv_color_black(), LV_STATE_DEFAULT);
@@ -233,12 +232,22 @@ void lv_tela_1(void) {
 	lv_obj_clear_flag(lv_scr_act(), LV_OBJ_FLAG_SCROLLABLE);
 	
 	// ----------------------- RELÓGIO LABEL ---------------------------------
-	labelClock = lv_label_create(lv_scr_act());
+	labelClock = lv_label_create(scr1);
 	lv_obj_align(labelClock, LV_ALIGN_RIGHT_MID, -20 , -100);
 	lv_obj_set_style_text_font(labelClock, &dseg30, LV_STATE_DEFAULT);
 	lv_obj_set_style_text_color(labelClock, lv_color_black(), LV_STATE_DEFAULT);
 	
 }
+
+
+void create_scr2(lv_obj_t * screen) {
+	// ----------------------- RELÓGIO LABEL ---------------------------------
+	labelClock = lv_label_create(scr2);
+	lv_obj_align(labelClock, LV_ALIGN_RIGHT_MID, -20 , -100);
+	lv_obj_set_style_text_font(labelClock, &dseg30, LV_STATE_DEFAULT);
+	lv_obj_set_style_text_color(labelClock, lv_color_black(), LV_STATE_DEFAULT);	
+}
+
 
 
 /************************************************************************/
@@ -247,13 +256,26 @@ void lv_tela_1(void) {
 
 static void task_lcd(void *pvParameters) {
 	int px, py;
+	
+	scr1  = lv_obj_create(NULL);
+	create_scr(scr1);
+	lv_scr_load(scr1);
 
-	lv_tela_1();
+	//lv_tela_1();
 
 	for (;;)  {
 		lv_tick_inc(50);
 		lv_task_handler();
 		vTaskDelay(50);
+		if (wheel_clicked){
+			printf("CLIQUEI \n");
+			wheel_clicked = 0;
+			scr2  = lv_obj_create(NULL);
+			create_scr2(scr2);
+			lv_scr_load(scr2);
+			
+		}
+		//printf("Cheguei Aqui \n");
 	}
 }
 
