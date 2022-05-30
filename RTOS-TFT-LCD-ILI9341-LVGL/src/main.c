@@ -53,6 +53,9 @@ volatile int play_clicked = 0;
 volatile int replay_clicked = 0;
 volatile int wheel_clicked = 0;
 
+volatile int uma_vez = 1;
+
+
 /************************************************************************/
 /* RTOS                                                                 */
 /************************************************************************/
@@ -104,6 +107,7 @@ volatile uint32_t alarm_sec, alarm_h, alarm_min;
 
 SemaphoreHandle_t xSemaphoreRTC;
 SemaphoreHandle_t xSemaphoreTC;
+SemaphoreHandle_t xSemaphoreButPlay;
 
 int t = 0;
 double dist = 0;
@@ -128,7 +132,7 @@ static void play_handler(lv_event_t * e) {
 		LV_LOG_USER("Clicked");
 		if (play_clicked == 0){
 			play_clicked = 1;
-			} else {
+		} else {
 			play_clicked = 0;
 		}
 	}
@@ -137,6 +141,7 @@ static void play_handler(lv_event_t * e) {
 	}
 }
 
+
 static void replay_handler(lv_event_t * e) {
 	lv_event_code_t code = lv_event_get_code(e);
 
@@ -144,9 +149,7 @@ static void replay_handler(lv_event_t * e) {
 		LV_LOG_USER("Clicked");
 		if (replay_clicked == 0){
 			replay_clicked = 1;
-			} else {
-			replay_clicked = 0;
-		}
+		} 
 	}
 	else if(code == LV_EVENT_VALUE_CHANGED) {
 		LV_LOG_USER("Toggled");
@@ -183,11 +186,12 @@ void lv_tela_1(void) {
 	lv_obj_t * cronometro_img = lv_img_create(lv_scr_act());
 	
 	// -------------------- PLAY BUTTON --------------------
-
+	
 	lv_obj_add_event_cb(play_logo, play_handler, LV_EVENT_ALL, NULL);
 	lv_obj_align(play_logo, LV_ALIGN_BOTTOM_LEFT, 15, 60);
 	lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &playbtn, NULL, NULL);
 	lv_obj_add_style(play_logo, &style, LV_STATE_PRESSED);
+	
 	
 	// -------------------- REPLAY BUTTON --------------------
 	
@@ -314,13 +318,29 @@ static void task_RTC(void *pvParameters) {
 }
 
 
-static void task_TC(void *pvParameters) {
-	TC_init(TC0, ID_TC1, 1, 1);
-	tc_start(TC0, 1);
-
-	//xSemaphoreTake(xSemaphoreRTC, 1000
+static void task_TC(void *pvParameters) {	
+	
 	for (;;) {
 		//rtc_get_time(RTC, &current_hour,&current_min, &current_sec);
+		if (play_clicked && uma_vez){
+			TC_init(TC0, ID_TC1, 1, 1);
+			tc_start(TC0, 1);
+			printf("CLIQUEI \n");
+			uma_vez = 0;
+		} 
+		
+		if (replay_clicked){
+			tc_stop(TC0, 1);
+			alarm_sec = 0;
+			alarm_min = 0;
+			alarm_h = 0;
+			//TC_init(TC0, ID_TC1, 1, 1);
+			//tc_start(TC0, 1);
+			replay_clicked = 0;
+			play_clicked = 0;
+			uma_vez = 1;
+		}
+
 
 		/* aguarda por tempo inderteminado até a liberacao do semaforo */
 		if (xSemaphoreTake(xSemaphoreTC, 1000 / portTICK_PERIOD_MS)){
@@ -340,6 +360,12 @@ void TC1_Handler(void) {
 	* Isso é realizado pela leitura do status do periférico
 	**/
 	volatile uint32_t status = tc_get_status(TC0, 1);
+	
+	if (!play_clicked) {
+		tc_stop(TC0, 1);
+		printf("DESCLIQUEI \n");
+		uma_vez = 1;
+	}
 
 	/** Muda o estado do LED (pisca) **/
 		
@@ -627,6 +653,10 @@ int main(void) {
 
 	xSemaphoreTC = xSemaphoreCreateBinary();
 	if (xSemaphoreTC == NULL)
+	printf("falha em criar o semaforo \n");
+
+	xSemaphoreButPlay = xSemaphoreCreateBinary();
+	if (xSemaphoreButPlay == NULL)
 	printf("falha em criar o semaforo \n");
 
 	/* Create task to control oled */
