@@ -417,7 +417,8 @@ src/main.d src/main.o: ../src/main.c ../src/asf.h \
  ../src/ASF/thirdparty/CMSIS/Include/core_cm7.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\math.h \
  ../src/touch/touch.h ../src/playbtn.h ../src/replaybtn.h \
- ../src/wheelbtn.h ../src/cronometro.h
+ ../src/wheelbtn.h ../src/cancelbtn.h ../src/confirmbtn.h \
+ ../src/returnbtn.h ../src/cronometro.h
 
 ../src/asf.h:
 
@@ -1282,5 +1283,11 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-no
 ../src/replaybtn.h:
 
 ../src/wheelbtn.h:
+
+../src/cancelbtn.h:
+
+../src/confirmbtn.h:
+
+../src/returnbtn.h:
 
 ../src/cronometro.h:
