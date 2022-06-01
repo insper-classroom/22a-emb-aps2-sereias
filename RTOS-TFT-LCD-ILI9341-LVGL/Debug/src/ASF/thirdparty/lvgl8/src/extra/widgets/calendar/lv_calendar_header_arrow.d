@@ -16,11 +16,11 @@ src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/lv_calendar_header_arrow.d \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\lib\gcc\arm-none-eabi\6.3.1\include\stddef.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\lib\gcc\arm-none-eabi\6.3.1\include\stdbool.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../misc/lv_style.h \
- ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../misc/../font/lv_font.h \
- ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../misc/../font/../lv_conf_internal.h \
- ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../misc/../font/lv_symbol_def.h \
- ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../misc/../font/../misc/lv_area.h \
- ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../misc/../font/../misc/../lv_conf_internal.h \
+ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\font\lv_font.h \
+ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h \
+ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\font\lv_symbol_def.h \
+ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_area.h \
+ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\string.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\_ansi.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\newlib.h \
@@ -35,7 +35,7 @@ src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/lv_calendar_header_arrow.d \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\xlocale.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\string.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../misc/lv_color.h \
- ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../misc/../lv_conf_internal.h \
+ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../misc/lv_math.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../misc/lv_types.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../misc/lv_area.h \
@@ -55,13 +55,13 @@ src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/lv_calendar_header_arrow.d \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../hal/lv_hal_disp.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../hal/lv_hal.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../hal/../draw/lv_img_buf.h \
- ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../hal/../draw/../misc/lv_color.h \
- ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../hal/../draw/../misc/lv_area.h \
+ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_color.h \
+ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_area.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../hal/../misc/lv_color.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../hal/../misc/lv_area.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../hal/../misc/lv_ll.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../hal/../misc/lv_timer.h \
- ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../hal/../misc/../lv_conf_internal.h \
+ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../hal/../misc/lv_mem.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../hal/../misc/lv_log.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../hal/../misc/lv_types.h \
@@ -78,24 +78,23 @@ src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/lv_calendar_header_arrow.d \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/lv_obj_style_gen.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/lv_obj_draw.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/lv_draw.h \
- ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../lv_conf_internal.h \
- ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../misc/lv_style.h \
- ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../misc/lv_txt.h \
+ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h \
+ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_style.h \
+ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_txt.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/lv_img_decoder.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/lv_img_buf.h \
- ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../misc/lv_fs.h \
- ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../misc/../lv_conf_internal.h \
- ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../misc/lv_types.h \
- ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../misc/lv_area.h \
+ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_fs.h \
+ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_types.h \
+ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_area.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/lv_img_cache.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/lv_draw_rect.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/lv_draw_blend.h \
- ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../misc/lv_color.h \
+ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_color.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/lv_draw_mask.h \
- ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../misc/lv_math.h \
- ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../font/lv_font.h \
+ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_math.h \
+ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\font\lv_font.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/lv_draw_label.h \
- ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../misc/lv_bidi.h \
+ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_bidi.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/lv_draw_img.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/lv_draw_line.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/lv_draw_triangle.h \
@@ -115,7 +114,7 @@ src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/lv_calendar_header_arrow.d \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../widgets/../misc/lv_txt.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../widgets/../draw/lv_draw.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../layouts/flex/lv_flex.h \
- ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../layouts/flex/../../../core/lv_obj.h
+ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/lv_calendar_header_arrow.h:
 
@@ -147,15 +146,15 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\lib\gc
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../misc/lv_style.h:
 
-../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../misc/../font/lv_font.h:
+c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\font\lv_font.h:
 
-../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../misc/../font/../lv_conf_internal.h:
+c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h:
 
-../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../misc/../font/lv_symbol_def.h:
+c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\font\lv_symbol_def.h:
 
-../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../misc/../font/../misc/lv_area.h:
+c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_area.h:
 
-../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../misc/../font/../misc/../lv_conf_internal.h:
+c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\string.h:
 
@@ -185,7 +184,7 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-no
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../misc/lv_color.h:
 
-../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../misc/../lv_conf_internal.h:
+c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../misc/lv_math.h:
 
@@ -225,9 +224,9 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-no
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../hal/../draw/lv_img_buf.h:
 
-../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../hal/../draw/../misc/lv_color.h:
+c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_color.h:
 
-../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../hal/../draw/../misc/lv_area.h:
+c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_area.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../hal/../misc/lv_color.h:
 
@@ -237,7 +236,7 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-no
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../hal/../misc/lv_timer.h:
 
-../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../hal/../misc/../lv_conf_internal.h:
+c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../hal/../misc/lv_mem.h:
 
@@ -271,23 +270,21 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-no
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/lv_draw.h:
 
-../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../lv_conf_internal.h:
+c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h:
 
-../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../misc/lv_style.h:
+c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_style.h:
 
-../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../misc/lv_txt.h:
+c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_txt.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/lv_img_decoder.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/lv_img_buf.h:
 
-../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../misc/lv_fs.h:
+c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_fs.h:
 
-../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../misc/../lv_conf_internal.h:
+c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_types.h:
 
-../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../misc/lv_types.h:
-
-../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../misc/lv_area.h:
+c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_area.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/lv_img_cache.h:
 
@@ -295,17 +292,17 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-no
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/lv_draw_blend.h:
 
-../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../misc/lv_color.h:
+c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_color.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/lv_draw_mask.h:
 
-../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../misc/lv_math.h:
+c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_math.h:
 
-../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../font/lv_font.h:
+c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\font\lv_font.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/lv_draw_label.h:
 
-../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/../misc/lv_bidi.h:
+c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_bidi.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../../core/../draw/lv_draw_img.h:
 
@@ -345,4 +342,4 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-no
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../layouts/flex/lv_flex.h:
 
-../src/ASF/thirdparty/lvgl8/src/extra/widgets/calendar/../../layouts/flex/../../../core/lv_obj.h:
+c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h:
