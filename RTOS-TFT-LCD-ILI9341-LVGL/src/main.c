@@ -1,5 +1,5 @@
 /************************************************************************/
-/* includes                                                             */
+/* INCLUDES                                                             */
 /************************************************************************/
 
 #include <asf.h>
@@ -15,12 +15,19 @@
 #include "confirmbtn.h"
 #include "returnbtn.h"
 #include "cronometro.h"
+#include "wheelimg.h"
+#include "logoimg.h"
+#include "distimg.h"
+#include "velintimg.h"
 
+/************************************************************************/
+/* DEFINES PINOS                                                        */
+/************************************************************************/
 
-#define SIMULADOR_PIO      PIOA
-#define SIMULADOR_PIO_ID   ID_PIOA
-#define SIMULADOR_IDX  19
-#define SIMULADOR_IDX_MASK (1 << SIMULADOR_IDX)
+#define SIMULADOR_PIO			PIOA
+#define SIMULADOR_PIO_ID		ID_PIOA
+#define SIMULADOR_IDX			19
+#define SIMULADOR_IDX_MASK		(1 << SIMULADOR_IDX)
 
 /************************************************************************/
 /* LCD / LVGL                                                           */
@@ -30,14 +37,15 @@
 #define LV_VER_RES_MAX          (240)
 //#define RAMP
 
-#define RAIO 0.58/2
-#define VEL_MAX_KMH  5.0f
-#define VEL_MIN_KMH  1.0f
+#define RAIO					0.58/2
+#define VEL_MAX_KMH				5.0f
+#define VEL_MIN_KMH				1.0f
 
 
 LV_FONT_DECLARE(dseg20);
 LV_FONT_DECLARE(dseg30);
 LV_FONT_DECLARE(dseg35);
+LV_FONT_DECLARE(dseg50);
 
 static lv_disp_draw_buf_t disp_buf;
 static lv_color_t buf_1[LV_HOR_RES_MAX * LV_VER_RES_MAX];
@@ -49,9 +57,9 @@ static lv_obj_t * labelReplay;
 static lv_obj_t * labelWheel;
 static lv_obj_t * labelCron;
 static lv_obj_t * labelDist;
-static 	lv_obj_t * labelClock;
-static 	lv_obj_t * labelVel;
-
+static lv_obj_t * labelClock;
+static lv_obj_t * labelVelMed;
+static lv_obj_t * labelVelInst;
 
 volatile int play_clicked = 0;
 volatile int replay_clicked = 0;
@@ -124,12 +132,7 @@ volatile uint32_t alarm_sec, alarm_h, alarm_min;
 SemaphoreHandle_t xSemaphoreRTC;
 SemaphoreHandle_t xSemaphoreTC;
 SemaphoreHandle_t xSemaphoreButPlay;
-
-QueueHandle_t xQueueVel;
-QueueHandle_t xQueueVelMedia;
-QueueHandle_t xQueueAcel;
-QueueHandle_t xQueueDist;
-
+SemaphoreHandle_t xSemaphoredT;
 
 int t = 0;
 double dist = 0;
@@ -143,6 +146,7 @@ int segundos_vel_media = 0;
 void RTC_init(Rtc *rtc, uint32_t id_rtc, calendar t, uint32_t irq_type);
 void RTC_Handler(void);
 void TC_init(Tc * TC, int ID_TC, int TC_CHANNEL, int freq);
+void RTT_init(float freqPrescale, uint32_t IrqNPulses, uint32_t rttIRQSource);
 
 /************************************************************************/
 /* lvgl                                                                 */
@@ -196,16 +200,17 @@ static void wheel_handler(lv_event_t * e) {
 void create_scr(lv_obj_t * screen) {
 	static lv_style_t style;
 	lv_style_init(&style);
-	//lv_style_set_bg_color(&style, lv_color_white());
-	
-	lv_obj_set_style_bg_color(scr1, lv_color_white(), LV_PART_MAIN );
+	lv_obj_set_style_bg_color(screen, lv_color_white(), LV_PART_MAIN );
 	
 	// -------------------- BUTTON INITS --------------------
 	
-	lv_obj_t * play_logo = lv_imgbtn_create(scr1);
-	lv_obj_t * replay_logo = lv_imgbtn_create(scr1);
-	lv_obj_t * wheel_logo = lv_imgbtn_create(scr1);
-	lv_obj_t * cronometro_img = lv_img_create(scr1);
+	lv_obj_t * play_logo = lv_imgbtn_create(screen);
+	lv_obj_t * replay_logo = lv_imgbtn_create(screen);
+	lv_obj_t * wheel_logo = lv_imgbtn_create(screen);
+	lv_obj_t * cronometro_img = lv_img_create(screen);
+	lv_obj_t * company_logo = lv_img_create(screen);
+	lv_obj_t * dist_img = lv_img_create(screen);
+	lv_obj_t * velinst_img = lv_img_create(screen);
 	
 	// -------------------- PLAY BUTTON --------------------
 	
@@ -236,55 +241,61 @@ void create_scr(lv_obj_t * screen) {
 	
 	// -------------------- CRONOMETRO LABEL --------------------
 	
-	labelCron = lv_label_create(scr1);
+	labelCron = lv_label_create(screen);
 	lv_obj_align(labelCron, LV_ALIGN_LEFT_MID, 85 , 0);
 	lv_obj_set_style_text_font(labelCron, &dseg30, LV_STATE_DEFAULT);
 	lv_obj_set_style_text_color(labelCron, lv_color_black(), LV_STATE_DEFAULT);
-	//lv_label_set_text_fmt(labelCron, "%02d:%02d", 01,54);
 	lv_obj_add_style(labelCron, &style, 0);
+	
+	// ---------------------- DIST IMG ----------------------
+	
+	lv_img_set_src(dist_img, &distimg);
+	lv_obj_align(dist_img, LV_ALIGN_RIGHT_MID, -75, 0);
 	
 	// -------------------- DIST LABEL --------------------
 	
-	labelDist = lv_label_create(scr1);
-	lv_obj_align(labelDist, LV_ALIGN_RIGHT_MID, -40 , 0);
-	lv_obj_set_style_text_font(labelDist, &dseg30, LV_STATE_DEFAULT);
+	labelDist = lv_label_create(screen);
+	lv_obj_align(labelDist, LV_ALIGN_RIGHT_MID, -20 , 0);
+	lv_obj_set_style_text_font(labelDist, &dseg20, LV_STATE_DEFAULT);
 	lv_obj_set_style_text_color(labelDist, lv_color_black(), LV_STATE_DEFAULT);
-	
 	lv_obj_add_style(labelDist, &style, 0);
 	
+	// -------------------- VEL. MED. LABEL --------------------
+	
+	labelVelMed = lv_label_create(screen);
+	lv_obj_align(labelVelMed, LV_ALIGN_TOP_RIGHT, -40 , 32);
+	lv_obj_set_style_text_font(labelVelMed, &dseg50, LV_STATE_DEFAULT);
+	lv_obj_set_style_text_color(labelVelMed, lv_color_black(), LV_STATE_DEFAULT);
+	lv_label_set_text_fmt(labelVelMed, "%02d", 25);
+	lv_obj_add_style(labelVelMed, &style, 0);
+	
 	// ----------------------- RELÓGIO LABEL ---------------------------------
-	labelClock = lv_label_create(scr1);
-	lv_obj_align(labelClock, LV_ALIGN_RIGHT_MID, -20 , -100);
-	lv_obj_set_style_text_font(labelClock, &dseg30, LV_STATE_DEFAULT);
+	
+	labelClock = lv_label_create(screen);
+	lv_obj_align(labelClock, LV_ALIGN_TOP_LEFT, 55 , 5);
+	lv_obj_set_style_text_font(labelClock, &dseg20, LV_STATE_DEFAULT);
 	lv_obj_set_style_text_color(labelClock, lv_color_black(), LV_STATE_DEFAULT);
 	
-	lv_obj_clear_flag(scr1, LV_OBJ_FLAG_SCROLLABLE);
+	// ---------------------- VEL. INST. IMG ----------------------
 	
-	// -------------------------- VELOCIDADE ------------------------------
-	labelVel = lv_label_create(scr1);
-	lv_obj_align(labelVel, LV_ALIGN_RIGHT_MID, -50 , -100);
-	lv_obj_set_style_text_font(labelVel, &dseg30, LV_STATE_DEFAULT);
-	lv_obj_set_style_text_color(labelVel, lv_color_black(), LV_STATE_DEFAULT);
-		
-	lv_obj_clear_flag(scr1, LV_OBJ_FLAG_SCROLLABLE);
+	lv_img_set_src(velinst_img, &velintimg);
+	lv_obj_align(velinst_img, LV_ALIGN_TOP_LEFT, 10, 38);
 	
-}
-
-
-static void wheel_tela2_handler(lv_event_t * e) {
-	lv_event_code_t code = lv_event_get_code(e);
-
-	if(code == LV_EVENT_CLICKED) {
-		LV_LOG_USER("Clicked");
-		if (wheel_tela2_clicked == 0){
-			wheel_tela2_clicked = 1;
-			} else {
-			wheel_tela2_clicked = 0;
-		}
-	}
-	else if(code == LV_EVENT_VALUE_CHANGED) {
-		LV_LOG_USER("Toggled");
-	}
+	// -------------------- VEL. INST. LABEL --------------------
+	
+	labelVelInst = lv_label_create(screen);
+	lv_obj_align(labelVelInst, LV_ALIGN_TOP_LEFT, 70, 32);
+	lv_obj_set_style_text_font(labelVelInst, &dseg50, LV_STATE_DEFAULT);
+	lv_obj_set_style_text_color(labelVelInst, lv_color_black(), LV_STATE_DEFAULT);
+	lv_label_set_text_fmt(labelVelInst, "%02d", 32);
+	lv_obj_add_style(labelVelInst, &style, 0);
+	
+	// ----------------------- LOGO IMG ---------------------------------
+	
+	lv_img_set_src(company_logo, &logoimg);
+	lv_obj_align(company_logo, LV_ALIGN_TOP_LEFT, 10, 0);
+	
+	lv_obj_clear_flag(screen, LV_OBJ_FLAG_SCROLLABLE);
 }
 
 static void return_handler(lv_event_t * e) {
@@ -352,45 +363,40 @@ void create_scr2(lv_obj_t * screen) {
 
 	static lv_style_t style;
 	lv_style_init(&style);
-	//lv_style_set_bg_color(&style, lv_color_white());
-	
-	lv_obj_set_style_bg_color(scr2, lv_color_white(), LV_PART_MAIN );
+	lv_obj_set_style_bg_color(screen, lv_color_white(), LV_PART_MAIN );
 	
 	
 	// -------------------- BUTTON INITS --------------------
 	
-	lv_obj_t * cancel_logo = lv_imgbtn_create(scr2);
-	lv_obj_t * confirm_logo = lv_imgbtn_create(scr2);
-	//lv_obj_t * drop_logo = lv_imgbtn_create(lv_scr_act());
-	lv_obj_t * return_logo = lv_imgbtn_create(scr2);
-	lv_obj_t * dropdown = lv_dropdown_create(scr2);
-	lv_obj_t * wheel_logo = lv_imgbtn_create(scr2);
+	lv_obj_t * cancel_logo = lv_imgbtn_create(screen);
+	lv_obj_t * confirm_logo = lv_imgbtn_create(screen);
+	lv_obj_t * return_logo = lv_imgbtn_create(screen);
+	lv_obj_t * dropdown = lv_dropdown_create(screen);
+	lv_obj_t * wheel2_logo = lv_img_create(screen);
 	
 	// -------------------- RETURN BUTTON --------------------
 
 	lv_obj_add_event_cb(return_logo, return_handler, LV_EVENT_ALL, NULL);
-	lv_obj_align(return_logo, LV_ALIGN_TOP_LEFT, 15, 0);
+	lv_obj_align(return_logo, LV_ALIGN_TOP_LEFT, 15, 5);
 	lv_imgbtn_set_src(return_logo, LV_IMGBTN_STATE_RELEASED, &returnbtn, NULL, NULL);
 	lv_obj_add_style(return_logo, &style, LV_STATE_PRESSED);
 	
 	// -------------------- WHEEL 2 BUTTON --------------------
 
-	lv_obj_add_event_cb(wheel_logo, wheel_tela2_handler, LV_EVENT_ALL, NULL);
-	lv_obj_align(wheel_logo, LV_ALIGN_TOP_RIGHT, -15, 0);
-	lv_imgbtn_set_src(wheel_logo, LV_IMGBTN_STATE_RELEASED, &wheelbtn, NULL, NULL);
-	lv_obj_add_style(wheel_logo, &style, LV_STATE_PRESSED);
+	lv_img_set_src(wheel2_logo, &wheelimg);
+	lv_obj_align(wheel2_logo, LV_ALIGN_TOP_RIGHT, -10, 5);
 	
 	// -------------------- CONFIRM BUTTON --------------------
 
 	lv_obj_add_event_cb(confirm_logo, confirm_handler, LV_EVENT_ALL, NULL);
-	lv_obj_align(confirm_logo, LV_ALIGN_BOTTOM_LEFT, 15, 60);
+	lv_obj_align(confirm_logo, LV_ALIGN_BOTTOM_LEFT, 15, 50);
 	lv_imgbtn_set_src(confirm_logo, LV_IMGBTN_STATE_RELEASED, &confirmbtn, NULL, NULL);
 	lv_obj_add_style(confirm_logo, &style, LV_STATE_PRESSED);
 	
 	// -------------------- CANCEL BUTTON --------------------
 
 	lv_obj_add_event_cb(cancel_logo, cancel_handler, LV_EVENT_ALL, NULL);
-	lv_obj_align_to(cancel_logo, confirm_logo, LV_ALIGN_OUT_RIGHT_TOP, 0, 0);
+	lv_obj_align_to(cancel_logo, confirm_logo, LV_ALIGN_OUT_RIGHT_TOP, 90, 0);
 	lv_imgbtn_set_src(cancel_logo, LV_IMGBTN_STATE_RELEASED, &cancelbtn, NULL, NULL);
 	lv_obj_add_style(cancel_logo, &style, LV_STATE_PRESSED);
 	
@@ -400,7 +406,7 @@ void create_scr2(lv_obj_t * screen) {
 	"18\n"
 	"19\n"
 	"20");
-	lv_obj_align(dropdown, LV_ALIGN_CENTER, 10, 0);
+	lv_obj_align(dropdown, LV_ALIGN_CENTER, -20, 0);
 	lv_obj_add_event_cb(dropdown, drop_handler, LV_EVENT_ALL, NULL);
 	
 	lv_obj_clear_flag(screen, LV_OBJ_FLAG_SCROLLABLE);
@@ -420,8 +426,6 @@ static void task_lcd(void *pvParameters) {
 	create_scr(scr1);
 	lv_scr_load(scr1);
 
-	//lv_tela_1();
-
 	for (;;)  {
 		lv_tick_inc(50);
 		lv_task_handler();
@@ -432,9 +436,12 @@ static void task_lcd(void *pvParameters) {
 			scr2  = lv_obj_create(NULL);
 			create_scr2(scr2);
 			lv_scr_load(scr2);
-			
 		}
-		//printf("Cheguei Aqui \n");
+			
+		if (return_clicked) {
+			return_clicked = 0;
+			lv_scr_load(scr1);
+		}
 	}
 }
 
@@ -491,7 +498,7 @@ static void task_RTC(void *pvParameters) {
 		/* aguarda por tempo inderteminado até a liberacao do semaforo */
 		if (xSemaphoreTake(xSemaphoreRTC, 1000 / portTICK_PERIOD_MS)){
 			lv_label_set_text_fmt(labelClock, "%02d:%02d", current_hour, current_min);
-		} else {
+			} else {
 			lv_label_set_text_fmt(labelClock, "%02d %02d", current_hour, current_min);
 		}
 		
@@ -534,6 +541,69 @@ static void task_TC(void *pvParameters) {
 	
 }
 
+void SIMULADOR_callback(void){
+	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+	xSemaphoreGiveFromISR(xSemaphoredT, &xHigherPriorityTaskWoken);
+	
+}
+
+
+static void task_calculos(void *pvParameters) {
+	
+	//printf("DESCIDA\n");
+	TC_init(TC1, ID_TC4, 1, 1);
+	tc_start(TC1, 1);
+	int counter = 0;
+	
+	
+	RTT_init(100, 0, RTT_MR_RTTINCIEN);
+
+	for(;;){
+		if (xSemaphoreTake(xSemaphoredT, 0)){
+				int pulsos = rtt_read_timer_value(RTT);
+				double tempo_s = pulsos/100.0;
+				double f = 1/(double)tempo_s;
+				//double w = (2*PI*f);
+				double w = 2*PI/tempo_s;  // vel angular
+				double v_metros = (RAIO*w); //vel linear em [m/s]
+				double v = (RAIO*w)*3.6; //vel linear em [km/h]
+				//double v = ((2*PI*RAIO)/tempo_s)*3.6;
+
+				dist += (2*PI*RAIO*pulsos)/1000.0; //era em metros, coloquei pra km
+				lv_label_set_text_fmt(labelDist, "%.1f km", dist); // FALTA ADICIONAR O "KM" AQUI!! e RECOMENDO FAZER UMA DSEG25 PRA CÁ!
+
+				acel = (v_metros - vel_anterior)/(double)tempo_s ;// aceleração em metros/s^2
+					
+					
+				vel_anterior = v_metros;
+					
+					
+				if (segundos_vel_media >= 10){
+					vel_media = vel_total/(double)counter;
+					printf("Velocidade média [km/h]: %2.1f \n", vel_media);
+					vel_total = 0;
+					segundos_vel_media = 0;
+					counter = 0;
+				} else {
+					counter+=1;
+					vel_total += v;
+				}
+					
+					
+				printf("Tempo [s] %2.1f \n", tempo_s);
+				printf("VEL [km/h]: %2.1f \n", v);
+				printf("Distância [km]: %2.1f \n", dist);
+				printf("Aceleração [m/s^2]: %2.1f \n", acel);
+					
+				RTT_init(100, 0, RTT_MR_RTTINCIEN);
+		} 
+	}
+	
+}
+	
+
+
+
 
 void TC1_Handler(void) {
 	/**
@@ -574,6 +644,7 @@ void TC4_Handler(void) {
 	volatile uint32_t status = tc_get_status(TC1, 1);
 
 	segundos_vel_media += 1;
+	printf("SEG VEL MEDIA: %d \n", segundos_vel_media);
 	
 }
 
@@ -638,66 +709,6 @@ void RTT_init(float freqPrescale, uint32_t IrqNPulses, uint32_t rttIRQSource) {
 	rtt_enable_interrupt(RTT, rttIRQSource);
 	else
 	rtt_disable_interrupt(RTT, RTT_MR_RTTINCIEN | RTT_MR_ALMIEN);
-	
-}
-
-void SIMULADOR_callback(void){
-	//printf("DESCIDA\n");
-	TC_init(TC1, ID_TC4, 1, 1);
-	tc_start(TC1, 1);
-	
-	if (t == 0) {
-		RTT_init(100, 0, RTT_MR_RTTINCIEN);
-		t = 1;
-		//printf("Dando init no RTT...\n");
-	} else {
-		int pulsos = rtt_read_timer_value(RTT);
-		double tempo_s = pulsos/100.0;
-		double f = 1/(double)tempo_s;
-		double w = (2*PI*f);
-		double v_metros = (RAIO*w); //vel linear em [m/s]
-		double v = (RAIO*w)*3.6; //vel linear em [km/h]
-
-		dist += (2*PI*RAIO*pulsos)/1000.0; //era em metros, coloquei pra km
-		double acel = (v_metros - vel_anterior)/tempo_s ;// aceleração em metros/s^2
-		vel_anterior = v_metros;
-		
-		
-		if (segundos_vel_media == 10){
-			segundos_vel_media = 0;
-			vel_media = vel_total/10.0;
-			vel_total = 0;
-		} else {
-			vel_total += v;
-		}
-		
-		printf("Tempo [s] %2.1f \n", tempo_s);
-		printf("VEL [km/h]: %2.1f \n", v);
-		printf("Distância [km]: %2.1f \n", dist);
-		printf("Aceleração [m/s^2]: %2.1f \n", acel);
-		printf("Velocidade média [km/h]: %2.1f \n", vel_media);
-		
-		//xQueueSend(xQueueVel, &v, 0);
-		//xQueueSend(xQueueDist, &dist, 0);
-		//xQueueSend(xQueueAcel, &acel, 0);
-		//xQueueSend(xQueueVelMedia, &vel_media, 0);
-		
-		
-		RTT_init(100, 0, RTT_MR_RTTINCIEN);
-		
-	}
-	
-}
-
-static void task_escreve_tela(void *pvParameters) {
-	double distancia;
-	double velocidade;
-	
-	if (xQueueReceive(xQueueDist, &distancia, 0)){
-		lv_label_set_text_fmt(labelDist, "%.1f km", distancia); // FALTA ADICIONAR O "KM" AQUI!! e RECOMENDO FAZER UMA DSEG25 PRA CÁ!
-	} if (xQueueReceive(xQueueDist, &velocidade, 0)){
-		lv_label_set_text_fmt(labelVel, "%.1f km", velocidade); 
-	} 
 	
 }
 
@@ -867,28 +878,20 @@ int main(void) {
 	if (xSemaphoreTC == NULL)
 	printf("falha em criar o semaforo \n");
 
+	xSemaphoredT = xSemaphoreCreateBinary();
+	if (xSemaphoredT == NULL)
+		printf("falha em criar o semaforo \n");
+
 	xSemaphoreButPlay = xSemaphoreCreateBinary();
 	if (xSemaphoreButPlay == NULL)
 	printf("falha em criar o semaforo \n");
-	
-	xQueueVel = xQueueCreate(10, sizeof(int));
-	if (xQueueVel == NULL)
-	printf("falha em criar a queue xQueuedT \n");	
 
-	xQueueDist = xQueueCreate(1, sizeof(int));
-	if (xQueueDist == NULL)
-	printf("falha em criar a queue xQueuedT \n");
-
-	xQueueAcel = xQueueCreate(1, sizeof(int));
-	if (xQueueAcel == NULL)
-	printf("falha em criar a queue xQueuedT \n");
-
-	xQueueVelMedia = xQueueCreate(1, sizeof(int));
-	if (xQueueVelMedia == NULL)
-	printf("falha em criar a queue xQueuedT \n");
-	
 	/* Create task to control oled */
 	if (xTaskCreate(task_lcd, "LCD", TASK_LCD_STACK_SIZE, NULL, TASK_LCD_STACK_PRIORITY, NULL) != pdPASS) {
+		printf("Failed to create lcd task\r\n");
+	}
+
+	if (xTaskCreate(task_calculos, "CALCULOS", TASK_CALC_STACK_SIZE, NULL, TASK_CALC_STACK_PRIORITY, NULL) != pdPASS) {
 		printf("Failed to create lcd task\r\n");
 	}
 
@@ -900,14 +903,9 @@ int main(void) {
 		printf("Failed to create test led task\r\n");
 	}
 
-	if (xTaskCreate(task_escreve_tela, "TC", TASK_CALC_STACK_SIZE, NULL, TASK_CALC_STACK_PRIORITY, NULL) != pdPASS) {
-		printf("Failed to create test led task\r\n");
-	}	
-	
-	
 	if (xTaskCreate(task_TC, "TC", TASK_TC_STACK_SIZE, NULL, TASK_TC_STACK_PRIORITY, NULL) != pdPASS) {
 		printf("Failed to create test led task\r\n");
-	}	
+	}		
 	
 	/* Start the scheduler. */
 	vTaskStartScheduler();

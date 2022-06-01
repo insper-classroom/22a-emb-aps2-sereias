@@ -886,6 +886,27 @@
     <Folder Include="src\touch\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\cancelbtn.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\confirmbtn.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\distimg.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\dseg50.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\logoimg.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\velintimg.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\wheelimg.h">
+      <SubType>compile</SubType>
+    </Compile>
     <None Include="src\ASF\sam\drivers\rtc\rtc.h">
       <SubType>compile</SubType>
     </None>
@@ -2311,13 +2332,7 @@
     <Compile Include="src\ASF\thirdparty\lvgl8\tests\unity\unity_support.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\cancelbtn.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="src\config\conf_touch.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\confirmbtn.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\cronometro.h">

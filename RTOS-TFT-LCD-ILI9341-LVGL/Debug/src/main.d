@@ -418,7 +418,8 @@ src/main.d src/main.o: ../src/main.c ../src/asf.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\math.h \
  ../src/touch/touch.h ../src/playbtn.h ../src/replaybtn.h \
  ../src/wheelbtn.h ../src/cancelbtn.h ../src/confirmbtn.h \
- ../src/returnbtn.h ../src/cronometro.h
+ ../src/returnbtn.h ../src/cronometro.h ../src/wheelimg.h \
+ ../src/logoimg.h ../src/distimg.h ../src/velintimg.h
 
 ../src/asf.h:
 
@@ -1291,3 +1292,11 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-no
 ../src/returnbtn.h:
 
 ../src/cronometro.h:
+
+../src/wheelimg.h:
+
+../src/logoimg.h:
+
+../src/distimg.h:
+
+../src/velintimg.h:

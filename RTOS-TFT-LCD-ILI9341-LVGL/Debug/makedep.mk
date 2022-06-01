@@ -2,6 +2,8 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
+src\dseg50.c
+
 src\ASF\sam\drivers\rtc\rtc.c
 
 src\ASF\sam\drivers\rtt\rtt.c
