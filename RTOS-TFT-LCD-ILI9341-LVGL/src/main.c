@@ -29,6 +29,12 @@
 #define SIMULADOR_IDX			19
 #define SIMULADOR_IDX_MASK		(1 << SIMULADOR_IDX)
 
+#define BUT_PIO			     PIOA
+#define BUT_PIO_ID           ID_PIOA
+#define BUT_PIO_IDX		     11
+#define BUT_PIO_IDX_MASK     (1u << BUT_PIO_IDX)
+
+
 /************************************************************************/
 /* LCD / LVGL                                                           */
 /************************************************************************/
@@ -287,7 +293,7 @@ void create_scr(lv_obj_t * screen) {
 	lv_obj_align(labelVelInst, LV_ALIGN_TOP_LEFT, 70, 32);
 	lv_obj_set_style_text_font(labelVelInst, &dseg50, LV_STATE_DEFAULT);
 	lv_obj_set_style_text_color(labelVelInst, lv_color_black(), LV_STATE_DEFAULT);
-	lv_label_set_text_fmt(labelVelInst, "%02d", 32);
+	lv_label_set_text_fmt(labelVelInst, "%2.1f", 0.0);
 	lv_obj_add_style(labelVelInst, &style, 0);
 	
 	// ----------------------- LOGO IMG ---------------------------------
@@ -555,53 +561,60 @@ static void task_calculos(void *pvParameters) {
 	tc_start(TC1, 1);
 	int counter = 0;
 	
+	double tempo_antigo_s = 0;
+	double dt;
 	
 	RTT_init(100, 0, RTT_MR_RTTINCIEN);
+	int toggle = 0;
 
 	for(;;){
-		if (xSemaphoreTake(xSemaphoredT, 0)){
-				int pulsos = rtt_read_timer_value(RTT);
-				double tempo_s = pulsos/100.0;
-				double f = 1/(double)tempo_s;
-				//double w = (2*PI*f);
-				double w = 2*PI/tempo_s;  // vel angular
-				double v_metros = (RAIO*w); //vel linear em [m/s]
-				double v = (RAIO*w)*3.6; //vel linear em [km/h]
-				//double v = ((2*PI*RAIO)/tempo_s)*3.6;
+		if (xSemaphoreTake(xSemaphoredT, 100)){
+			int pulsos = rtt_read_timer_value(RTT);
+			double tempo_s = pulsos/100.0;
+			
+			dt = tempo_s - tempo_antigo_s;
+			tempo_antigo_s = tempo_s;
+			
+			double f = 1/(double)dt;
+			//double w = (2*PI*f);
+			double w = 2*PI/dt;  // vel angular
+			double v_metros = (RAIO*w); //vel linear em [m/s]
+			double v = (RAIO*w)*3.6; //vel linear em [km/h]
+			//double v = ((2*PI*RAIO)/tempo_s)*3.6;
 
-				dist += (2*PI*RAIO*pulsos)/1000.0; //era em metros, coloquei pra km
-				lv_label_set_text_fmt(labelDist, "%.1f km", dist); // FALTA ADICIONAR O "KM" AQUI!! e RECOMENDO FAZER UMA DSEG25 PRA CÁ!
+			dist += (2*PI*RAIO*dt)/1000.0; //era em metros, coloquei pra km
+			lv_label_set_text_fmt(labelDist, "%.1f km", dist); // FALTA ADICIONAR O "KM" AQUI!! e RECOMENDO FAZER UMA DSEG25 PRA CÁ!
 
-				acel = (v_metros - vel_anterior)/(double)tempo_s ;// aceleração em metros/s^2
-					
-					
-				vel_anterior = v_metros;
-					
-					
-				if (segundos_vel_media >= 10){
-					vel_media = vel_total/(double)counter;
-					printf("Velocidade média [km/h]: %2.1f \n", vel_media);
-					vel_total = 0;
-					segundos_vel_media = 0;
-					counter = 0;
+			acel = (v_metros - vel_anterior)/(double)dt ;// aceleração em metros/s^2
+			
+			
+			vel_anterior = v_metros;
+			
+			
+			if (segundos_vel_media >= 10){
+				vel_media = vel_total/(double)counter;
+				//printf("Velocidade média [km/h]: %2.1f \n", vel_media);
+				vel_total = 0;
+				segundos_vel_media = 0;
+				counter = 0;
 				} else {
-					counter+=1;
-					vel_total += v;
-				}
-					
-					
-				printf("Tempo [s] %2.1f \n", tempo_s);
-				printf("VEL [km/h]: %2.1f \n", v);
-				printf("Distância [km]: %2.1f \n", dist);
-				printf("Aceleração [m/s^2]: %2.1f \n", acel);
-					
-				RTT_init(100, 0, RTT_MR_RTTINCIEN);
+				counter+=1;
+				vel_total += v;
+			}
+			
+			
+			printf("%2.1f \n", dt);
+			printf("VEL [km/h]: %2.1f \n", v);
+			lv_label_set_text_fmt(labelVelInst, "%2.1f", v);
+
+			printf("Distância [km]: %2.1f \n", dist);
+			printf("Aceleração [m/s^2]: %2.1f \n", acel);
+			
+			//RTT_init(100, 0, RTT_MR_RTTINCIEN);
 		} 
 	}
 	
 }
-	
-
 
 
 
@@ -644,7 +657,7 @@ void TC4_Handler(void) {
 	volatile uint32_t status = tc_get_status(TC1, 1);
 
 	segundos_vel_media += 1;
-	printf("SEG VEL MEDIA: %d \n", segundos_vel_media);
+	//printf("SEG VEL MEDIA: %d \n", segundos_vel_media);
 	
 }
 
@@ -759,6 +772,22 @@ void RTC_init(Rtc *rtc, uint32_t id_rtc, calendar t, uint32_t irq_type) {
 }
 
 void init(void) {
+	//pmc_enable_periph_clk(BUT_PIO_ID);
+	//pio_set_input(BUT_PIO,BUT_PIO_IDX_MASK,PIO_DEFAULT);
+		//
+	//pio_handler_set(BUT_PIO,
+	//BUT_PIO_ID,
+	//BUT_PIO_IDX_MASK,
+	//PIO_IT_FALL_EDGE,
+	//SIMULADOR_callback);
+		//
+	//pio_enable_interrupt(BUT_PIO, BUT_PIO_IDX_MASK);
+	//pio_get_interrupt_status(BUT_PIO);
+		//
+	//NVIC_EnableIRQ(BUT_PIO_ID);
+	//NVIC_SetPriority(BUT_PIO_ID, 4); // Prioridade 4
+	
+	
 	pmc_enable_periph_clk(SIMULADOR_PIO_ID);
 	pio_set_input(SIMULADOR_PIO,SIMULADOR_IDX_MASK,PIO_DEFAULT);
 	
@@ -774,9 +803,6 @@ void init(void) {
 	NVIC_EnableIRQ(SIMULADOR_PIO_ID);
 	NVIC_SetPriority(SIMULADOR_PIO_ID, 4); // Prioridade 4
 }
-
-
-
 
 /************************************************************************/
 /* configs                                                              */
@@ -864,11 +890,6 @@ int main(void) {
 	sysclk_init();
 	configure_console();
 	init();
-
-	/* LCd, touch and lvgl init*/
-	configure_lcd();
-	configure_touch();
-	configure_lvgl();
 	
 	xSemaphoreRTC = xSemaphoreCreateBinary();
 	if (xSemaphoreRTC == NULL)
@@ -886,6 +907,12 @@ int main(void) {
 	if (xSemaphoreButPlay == NULL)
 	printf("falha em criar o semaforo \n");
 
+
+	/* LCd, touch and lvgl init*/
+	configure_lcd();
+	configure_touch();
+	configure_lvgl();
+	
 	/* Create task to control oled */
 	if (xTaskCreate(task_lcd, "LCD", TASK_LCD_STACK_SIZE, NULL, TASK_LCD_STACK_PRIORITY, NULL) != pdPASS) {
 		printf("Failed to create lcd task\r\n");
@@ -895,10 +922,10 @@ int main(void) {
 		printf("Failed to create lcd task\r\n");
 	}
 
-	if (xTaskCreate(task_simulador, "Simulador", TASK_LCD_STACK_SIZE, NULL, TASK_LCD_STACK_PRIORITY, NULL) != pdPASS) {
-		printf("Failed to create simulador task\r\n");
-	}
-	
+// 	if (xTaskCreate(task_simulador, "Simulador", TASK_LCD_STACK_SIZE, NULL, TASK_LCD_STACK_PRIORITY, NULL) != pdPASS) {
+// 		printf("Failed to create simulador task\r\n");
+// 	}
+// 	
 	if (xTaskCreate(task_RTC, "RTC", TASK_RTC_STACK_SIZE, NULL, TASK_RTC_STACK_PRIORITY, NULL) != pdPASS) {
 		printf("Failed to create test led task\r\n");
 	}
