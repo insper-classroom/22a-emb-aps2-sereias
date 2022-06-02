@@ -70,7 +70,6 @@ static lv_obj_t * labelVelInstText;
 
 volatile int play_clicked = 0;
 volatile int replay_clicked = 0;
-volatile int wheel_clicked = 0;
 
 int pulsos = 0;
 
@@ -203,12 +202,8 @@ static void wheel_handler(lv_event_t * e) {
 
 	if(code == LV_EVENT_CLICKED) {
 		LV_LOG_USER("Clicked");
-		//if (wheel_clicked == 0){
-			wheel_clicked = 1;
-		//} 
-	}
-	else if(code == LV_EVENT_VALUE_CHANGED) {
-		LV_LOG_USER("Toggled");
+		BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+		xSemaphoreGiveFromISR(xSemaphoreWheel, xHigherPriorityTaskWoken); 
 	}
 }
 
@@ -454,9 +449,8 @@ static void task_lcd(void *pvParameters) {
 		lv_tick_inc(50);
 		lv_task_handler();
 		vTaskDelay(50);
-		if (wheel_clicked){
+		if (xSemaphoreTake(xSemaphoreWheel, 100)){
 			printf("CLIQUEI \n");
-			wheel_clicked = 0;
 			scr2  = lv_obj_create(NULL);
 			create_scr2(scr2);
 			lv_scr_load(scr2);
@@ -956,9 +950,29 @@ int main(void) {
 	xSemaphoredT = xSemaphoreCreateBinary();
 	if (xSemaphoredT == NULL)
 		printf("falha em criar o semaforo \n");
-
-	xSemaphoreButPlay = xSemaphoreCreateBinary();
-	if (xSemaphoreButPlay == NULL)
+	
+	xSemaphorePlay = xSemaphoreCreateBinary();
+	if (xSemaphorePlay == NULL)
+	printf("falha em criar o semaforo \n");
+	
+	xSemaphoreReplay = xSemaphoreCreateBinary();
+	if (xSemaphoreReplay == NULL)
+	printf("falha em criar o semaforo \n");
+	
+	xSemaphoreWheel = xSemaphoreCreateBinary();
+	if (xSemaphoreWheel == NULL)
+	printf("falha em criar o semaforo \n");
+	
+	xSemaphoreConfirm = xSemaphoreCreateBinary();
+	if (xSemaphoreConfirm == NULL)
+	printf("falha em criar o semaforo \n");
+	
+	xSemaphoreCancel = xSemaphoreCreateBinary();
+	if (xSemaphoreCancel == NULL)
+	printf("falha em criar o semaforo \n");
+	
+	xSemaphoreReturn = xSemaphoreCreateBinary();
+	if (xSemaphoreReturn == NULL)
 	printf("falha em criar o semaforo \n");
 
 
