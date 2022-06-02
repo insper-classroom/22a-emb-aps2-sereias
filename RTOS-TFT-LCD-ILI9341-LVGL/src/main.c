@@ -8,17 +8,17 @@
 #include "lvgl.h"
 #include "arm_math.h"
 #include "touch/touch.h"
-#include "playbtn.h"
-#include "replaybtn.h"
-#include "wheelbtn.h"
-#include "cancelbtn.h"
-#include "confirmbtn.h"
-#include "returnbtn.h"
-#include "cronometro.h"
-#include "wheelimg.h"
-#include "logoimg.h"
-#include "distimg.h"
-#include "velintimg.h"
+#include "imgs/playbtn.h"
+#include "imgs/replaybtn.h"
+#include "imgs/wheelbtn.h"
+#include "imgs/cancelbtn.h"
+#include "imgs/confirmbtn.h"
+#include "imgs/returnbtn.h"
+#include "imgs/cronometro.h"
+#include "imgs/wheelimg.h"
+#include "imgs/logoimg.h"
+#include "imgs/distimg.h"
+#include "imgs/velintimg.h"
 
 /************************************************************************/
 /* DEFINES PINOS                                                        */
@@ -29,10 +29,10 @@
 #define SIMULADOR_IDX			19
 #define SIMULADOR_IDX_MASK		(1 << SIMULADOR_IDX)
 
-#define BUT_PIO			     PIOA
-#define BUT_PIO_ID           ID_PIOA
-#define BUT_PIO_IDX		     11
-#define BUT_PIO_IDX_MASK     (1u << BUT_PIO_IDX)
+#define BUT_PIO					PIOA
+#define BUT_PIO_ID				ID_PIOA
+#define BUT_PIO_IDX				11
+#define BUT_PIO_IDX_MASK		(1u << BUT_PIO_IDX)
 
 
 /************************************************************************/
@@ -48,8 +48,10 @@
 
 
 LV_FONT_DECLARE(dseg20);
+LV_FONT_DECLARE(dseg25);
 LV_FONT_DECLARE(dseg30);
 LV_FONT_DECLARE(dseg35);
+LV_FONT_DECLARE(dseg40);
 LV_FONT_DECLARE(dseg50);
 
 static lv_disp_draw_buf_t disp_buf;
@@ -57,14 +59,14 @@ static lv_color_t buf_1[LV_HOR_RES_MAX * LV_VER_RES_MAX];
 static lv_disp_drv_t disp_drv; 
 static lv_indev_drv_t indev_drv;
 
-static lv_obj_t * labelPlay;
-static lv_obj_t * labelReplay;
-static lv_obj_t * labelWheel;
 static lv_obj_t * labelCron;
 static lv_obj_t * labelDist;
+static lv_obj_t * labelDistText;
 static lv_obj_t * labelClock;
 static lv_obj_t * labelVelMed;
+static lv_obj_t * labelVelMedText;
 static lv_obj_t * labelVelInst;
+static lv_obj_t * labelVelInstText;
 
 volatile int play_clicked = 0;
 volatile int replay_clicked = 0;
@@ -72,7 +74,6 @@ volatile int wheel_clicked = 0;
 
 int pulsos = 0;
 
-volatile int wheel_tela2_clicked = 0;
 volatile int return_clicked = 0;
 volatile int cancel_clicked = 0;
 volatile int confirm_clicked = 0;
@@ -89,14 +90,14 @@ char buf[32];
 #define TASK_LCD_STACK_SIZE                (1024*6/sizeof(portSTACK_TYPE))
 #define TASK_LCD_STACK_PRIORITY            (tskIDLE_PRIORITY)
 
-#define TASK_RTC_STACK_SIZE (4096 / sizeof(portSTACK_TYPE))
-#define TASK_RTC_STACK_PRIORITY (tskIDLE_PRIORITY)
+#define TASK_RTC_STACK_SIZE					(4096 / sizeof(portSTACK_TYPE))
+#define TASK_RTC_STACK_PRIORITY				(tskIDLE_PRIORITY)
 
-#define TASK_TC_STACK_SIZE (4096 / sizeof(portSTACK_TYPE))
-#define TASK_TC_STACK_PRIORITY (tskIDLE_PRIORITY)
+#define TASK_TC_STACK_SIZE					(4096 / sizeof(portSTACK_TYPE))
+#define TASK_TC_STACK_PRIORITY				(tskIDLE_PRIORITY)
 
-#define TASK_CALC_STACK_SIZE (4096 / sizeof(portSTACK_TYPE))
-#define TASK_CALC_STACK_PRIORITY (tskIDLE_PRIORITY)
+#define TASK_CALC_STACK_SIZE				(4096 / sizeof(portSTACK_TYPE))
+#define TASK_CALC_STACK_PRIORITY			(tskIDLE_PRIORITY)
 
 extern void vApplicationStackOverflowHook(xTaskHandle *pxTask,  signed char *pcTaskName);
 extern void vApplicationIdleHook(void);
@@ -141,6 +142,13 @@ SemaphoreHandle_t xSemaphoreTC;
 SemaphoreHandle_t xSemaphoreButPlay;
 SemaphoreHandle_t xSemaphoredT;
 
+SemaphoreHandle_t xSemaphorePlay;
+SemaphoreHandle_t xSemaphoreReplay;
+SemaphoreHandle_t xSemaphoreWheel;
+SemaphoreHandle_t xSemaphoreReturn;
+SemaphoreHandle_t xSemaphoreConfirm;
+SemaphoreHandle_t xSemaphoreCancel;
+
 int t = 0;
 double dist = 0;
 double acel = 0;
@@ -157,7 +165,7 @@ void TC_init(Tc * TC, int ID_TC, int TC_CHANNEL, int freq);
 void RTT_init(float freqPrescale, uint32_t IrqNPulses, uint32_t rttIRQSource);
 
 /************************************************************************/
-/* lvgl                                                                 */
+/* HANDLERS                                                             */
 /************************************************************************/
 
 static void play_handler(lv_event_t * e) {
@@ -181,9 +189,9 @@ static void replay_handler(lv_event_t * e) {
 
 	if(code == LV_EVENT_CLICKED) {
 		LV_LOG_USER("Clicked");
-		if (replay_clicked == 0){
+	//	if (replay_clicked == 0){
 			replay_clicked = 1;
-		} 
+		//} 
 	}
 	else if(code == LV_EVENT_VALUE_CHANGED) {
 		LV_LOG_USER("Toggled");
@@ -195,12 +203,72 @@ static void wheel_handler(lv_event_t * e) {
 
 	if(code == LV_EVENT_CLICKED) {
 		LV_LOG_USER("Clicked");
-		if (wheel_clicked == 0){
+		//if (wheel_clicked == 0){
 			wheel_clicked = 1;
-		} 
+		//} 
 	}
 	else if(code == LV_EVENT_VALUE_CHANGED) {
 		LV_LOG_USER("Toggled");
+	}
+}
+
+static void return_handler(lv_event_t * e) {
+	lv_event_code_t code = lv_event_get_code(e);
+
+	if(code == LV_EVENT_CLICKED) {
+		LV_LOG_USER("Clicked");
+		if (return_clicked == 0){
+			return_clicked = 1;
+			} else {
+			return_clicked = 0;
+		}
+	}
+	else if(code == LV_EVENT_VALUE_CHANGED) {
+		LV_LOG_USER("Toggled");
+	}
+}
+
+static void confirm_handler(lv_event_t * e) {
+	lv_event_code_t code = lv_event_get_code(e);
+
+	if(code == LV_EVENT_CLICKED) {
+		LV_LOG_USER("Clicked");
+		if (confirm_clicked == 0){
+			confirm_clicked = 1;
+			RAIO = (atoi(buf)*0.0254)/2.0;
+			printf("Option: %2.1f", RAIO);
+			} else {
+			confirm_clicked = 0;
+		}
+	}
+	else if(code == LV_EVENT_VALUE_CHANGED) {
+		LV_LOG_USER("Toggled");
+	}
+}
+
+static void cancel_handler(lv_event_t * e) {
+	lv_event_code_t code = lv_event_get_code(e);
+
+	if(code == LV_EVENT_CLICKED) {
+		LV_LOG_USER("Clicked");
+		if (cancel_clicked == 0){
+			cancel_clicked = 1;
+			} else {
+			cancel_clicked = 0;
+		}
+	}
+	else if(code == LV_EVENT_VALUE_CHANGED) {
+		LV_LOG_USER("Toggled");
+	}
+}
+
+static void drop_handler(lv_event_t * e)
+{
+	lv_event_code_t code = lv_event_get_code(e);
+	lv_obj_t * obj = lv_event_get_target(e);
+	if(code == LV_EVENT_VALUE_CHANGED) {
+		lv_dropdown_get_selected_str(obj, buf, sizeof(buf));
+		LV_LOG_USER("Option: %s", buf);
 	}
 }
 
@@ -258,23 +326,29 @@ void create_scr(lv_obj_t * screen) {
 	// ---------------------- DIST IMG ----------------------
 	
 	lv_img_set_src(dist_img, &distimg);
-	lv_obj_align(dist_img, LV_ALIGN_RIGHT_MID, -75, 0);
+	lv_obj_align(dist_img, LV_ALIGN_RIGHT_MID, -90, 0);
 	
 	// -------------------- DIST LABEL --------------------
 	
 	labelDist = lv_label_create(screen);
-	lv_obj_align(labelDist, LV_ALIGN_RIGHT_MID, -20 , 0);
+	labelDistText = lv_label_create(screen);
+	lv_obj_align(labelDist, LV_ALIGN_RIGHT_MID, -45 , 0);
+	lv_obj_align_to(labelDistText, labelDist, LV_ALIGN_OUT_RIGHT_TOP, 5, 0);
 	lv_obj_set_style_text_font(labelDist, &dseg20, LV_STATE_DEFAULT);
 	lv_obj_set_style_text_color(labelDist, lv_color_black(), LV_STATE_DEFAULT);
+	lv_label_set_text(labelDistText, "KM");
 	lv_obj_add_style(labelDist, &style, 0);
 	
 	// -------------------- VEL. MED. LABEL --------------------
 	
 	labelVelMed = lv_label_create(screen);
-	lv_obj_align(labelVelMed, LV_ALIGN_TOP_RIGHT, -40 , 32);
-	lv_obj_set_style_text_font(labelVelMed, &dseg50, LV_STATE_DEFAULT);
+	labelVelMedText = lv_label_create(screen);
+	lv_obj_align(labelVelMed, LV_ALIGN_TOP_RIGHT, -20 , 12);
+	lv_obj_align_to(labelVelMedText, labelVelMed, LV_ALIGN_OUT_BOTTOM_MID, -40, 27);
+	lv_obj_set_style_text_font(labelVelMed, &dseg40, LV_STATE_DEFAULT);
 	lv_obj_set_style_text_color(labelVelMed, lv_color_black(), LV_STATE_DEFAULT);
 	lv_label_set_text_fmt(labelVelMed, "%2.1f", 0.0);
+	lv_label_set_text(labelVelMedText, "AVG km/h");
 	lv_obj_add_style(labelVelMed, &style, 0);
 	
 	// ----------------------- RELÓGIO LABEL ---------------------------------
@@ -292,10 +366,13 @@ void create_scr(lv_obj_t * screen) {
 	// -------------------- VEL. INST. LABEL --------------------
 	
 	labelVelInst = lv_label_create(screen);
+	labelVelInstText = lv_label_create(screen);
 	lv_obj_align(labelVelInst, LV_ALIGN_TOP_LEFT, 70, 32);
+	lv_obj_align_to(labelVelInstText, labelVelInst, LV_ALIGN_OUT_BOTTOM_RIGHT, 120, 20);
 	lv_obj_set_style_text_font(labelVelInst, &dseg50, LV_STATE_DEFAULT);
 	lv_obj_set_style_text_color(labelVelInst, lv_color_black(), LV_STATE_DEFAULT);
-	lv_label_set_text_fmt(labelVelInst, "%2.1f", 0.0);
+	lv_label_set_text_fmt(labelVelInst, "%2.1f", 32);
+	lv_label_set_text(labelVelInstText, "km/h");
 	lv_obj_add_style(labelVelInst, &style, 0);
 	
 	// ----------------------- LOGO IMG ---------------------------------
@@ -305,69 +382,6 @@ void create_scr(lv_obj_t * screen) {
 	
 	lv_obj_clear_flag(screen, LV_OBJ_FLAG_SCROLLABLE);
 }
-
-static void return_handler(lv_event_t * e) {
-	lv_event_code_t code = lv_event_get_code(e);
-
-	if(code == LV_EVENT_CLICKED) {
-		LV_LOG_USER("Clicked");
-		if (return_clicked == 0){
-			return_clicked = 1;
-			} else {
-			return_clicked = 0;
-		}
-	}
-	else if(code == LV_EVENT_VALUE_CHANGED) {
-		LV_LOG_USER("Toggled");
-	}
-}
-
-static void confirm_handler(lv_event_t * e) {
-	lv_event_code_t code = lv_event_get_code(e);
-
-	if(code == LV_EVENT_CLICKED) {
-		LV_LOG_USER("Clicked");
-		if (confirm_clicked == 0){
-			confirm_clicked = 1;
-			RAIO = (atoi(buf)*0.0254)/2.0;
-			printf("Option: %2.1f", RAIO);
-		} else {
-			confirm_clicked = 0;
-		}
-	}
-	else if(code == LV_EVENT_VALUE_CHANGED) {
-		LV_LOG_USER("Toggled");
-	}
-}
-
-static void cancel_handler(lv_event_t * e) {
-	lv_event_code_t code = lv_event_get_code(e);
-
-	if(code == LV_EVENT_CLICKED) {
-		LV_LOG_USER("Clicked");
-		if (cancel_clicked == 0){
-			cancel_clicked = 1;
-		} else {
-			cancel_clicked = 0;
-		}
-	}
-	else if(code == LV_EVENT_VALUE_CHANGED) {
-		LV_LOG_USER("Toggled");
-	}
-}
-
-
-static void drop_handler(lv_event_t * e)
-{
-	lv_event_code_t code = lv_event_get_code(e);
-	lv_obj_t * obj = lv_event_get_target(e);
-	if(code == LV_EVENT_VALUE_CHANGED) {
-		lv_dropdown_get_selected_str(obj, buf, sizeof(buf));
-		LV_LOG_USER("Option: %s", buf);
-	}
-}
-
-
 
 void create_scr2(lv_obj_t * screen) {
 
@@ -524,13 +538,16 @@ static void task_RTC(void *pvParameters) {
 
 
 static void task_TC(void *pvParameters) {	
-	
+	int pclicked = 0;
 	for (;;) {
 		//rtc_get_time(RTC, &current_hour,&current_min, &current_sec);
 		if (play_clicked && uma_vez){
+			pclicked =!pclicked;
+
 			TC_init(TC0, ID_TC1, 1, 1);
 			tc_start(TC0, 1);
 			uma_vez = 0;
+			
 		} 
 		
 		if (replay_clicked){
@@ -599,7 +616,8 @@ static void task_calculos(void *pvParameters) {
 			//double v = ((2*PI*RAIO)/tempo_s)*3.6;
 
 			dist += (2*PI*RAIO*dt)/1000.0; //era em metros, coloquei pra km
-			lv_label_set_text_fmt(labelDist, "%.1f km", dist); // FALTA ADICIONAR O "KM" AQUI!! e RECOMENDO FAZER UMA DSEG25 PRA CÁ!
+			lv_label_set_text_fmt(labelDist, "%.1f", dist);
+			
 
 			acel = (v_metros - vel_anterior)/(double)dt ;// aceleração em metros/s^2
 			
@@ -684,15 +702,14 @@ void TC1_Handler(void) {
 }
 
 void TC4_Handler(void) {
-	/**
-	* Devemos indicar ao TC que a interrupção foi satisfeita.
-	* Isso é realizado pela leitura do status do periférico
-	**/
 	volatile uint32_t status = tc_get_status(TC1, 1);
 
 	segundos_vel_media += 1;
-	//printf("SEG VEL MEDIA: %d \n", segundos_vel_media);
-	
+	//if segundos_vel_media > 10 {
+		//segundos_vel_media = 0
+		//libera semaforo
+	//} else
+	 //segundos_vel_media++
 }
 
 

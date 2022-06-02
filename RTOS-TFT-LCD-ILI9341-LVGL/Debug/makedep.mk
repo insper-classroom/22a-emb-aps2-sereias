@@ -2,6 +2,16 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
+src\dseg20.c
+
+src\dseg25.c
+
+src\dseg30.c
+
+src\dseg35.c
+
+src\dseg40.c
+
 src\dseg50.c
 
 src\ASF\sam\drivers\rtc\rtc.c
@@ -627,12 +637,6 @@ src\ASF\thirdparty\lvgl8\tests\src\test_fonts\font_3.c
 src\ASF\thirdparty\lvgl8\tests\unity\unity.c
 
 src\ASF\thirdparty\lvgl8\tests\unity\unity_support.c
-
-src\dseg20.c
-
-src\dseg30.c
-
-src\dseg35.c
 
 src\touch\touch.c
 

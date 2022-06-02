@@ -416,10 +416,10 @@ src/main.d src/main.o: ../src/main.c ../src/asf.h \
  ../src/ASF/thirdparty/CMSIS/Include/arm_math.h \
  ../src/ASF/thirdparty/CMSIS/Include/core_cm7.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\math.h \
- ../src/touch/touch.h ../src/playbtn.h ../src/replaybtn.h \
- ../src/wheelbtn.h ../src/cancelbtn.h ../src/confirmbtn.h \
- ../src/returnbtn.h ../src/cronometro.h ../src/wheelimg.h \
- ../src/logoimg.h ../src/distimg.h ../src/velintimg.h
+ ../src/touch/touch.h ../src/imgs/playbtn.h ../src/imgs/replaybtn.h \
+ ../src/imgs/wheelbtn.h ../src/imgs/cancelbtn.h ../src/imgs/confirmbtn.h \
+ ../src/imgs/returnbtn.h ../src/imgs/cronometro.h ../src/imgs/wheelimg.h \
+ ../src/imgs/logoimg.h ../src/imgs/distimg.h ../src/imgs/velintimg.h
 
 ../src/asf.h:
 
@@ -1279,24 +1279,24 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-no
 
 ../src/touch/touch.h:
 
-../src/playbtn.h:
+../src/imgs/playbtn.h:
 
-../src/replaybtn.h:
+../src/imgs/replaybtn.h:
 
-../src/wheelbtn.h:
+../src/imgs/wheelbtn.h:
 
-../src/cancelbtn.h:
+../src/imgs/cancelbtn.h:
 
-../src/confirmbtn.h:
+../src/imgs/confirmbtn.h:
 
-../src/returnbtn.h:
+../src/imgs/returnbtn.h:
 
-../src/cronometro.h:
+../src/imgs/cronometro.h:
 
-../src/wheelimg.h:
+../src/imgs/wheelimg.h:
 
-../src/logoimg.h:
+../src/imgs/logoimg.h:
 
-../src/distimg.h:
+../src/imgs/distimg.h:
 
-../src/velintimg.h:
+../src/imgs/velintimg.h:

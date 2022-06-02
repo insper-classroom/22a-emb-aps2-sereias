@@ -883,28 +883,59 @@
     <Folder Include="src\ASF\thirdparty\lvgl8\tests\unity\" />
     <Folder Include="src\ASF\thirdparty\lvgl8\zephyr\" />
     <Folder Include="src\config\" />
+    <Folder Include="src\imgs" />
     <Folder Include="src\touch\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\cancelbtn.h">
+    <Compile Include="src\dseg20.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\confirmbtn.h">
+    <Compile Include="src\dseg25.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\distimg.h">
+    <Compile Include="src\dseg30.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\dseg35.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\dseg40.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\dseg50.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\logoimg.h">
+    <Compile Include="src\imgs\cancelbtn.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\velintimg.h">
+    <Compile Include="src\imgs\confirmbtn.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\wheelimg.h">
+    <Compile Include="src\imgs\cronometro.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\distimg.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\logoimg.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\playbtn.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\replaybtn.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\returnbtn.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\velintimg.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\wheelbtn.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\wheelimg.h">
       <SubType>compile</SubType>
     </Compile>
     <None Include="src\ASF\sam\drivers\rtc\rtc.h">
@@ -2335,34 +2366,10 @@
     <Compile Include="src\config\conf_touch.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\cronometro.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\dseg20.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\dseg30.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\dseg35.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\playbtn.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\replaybtn.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\returnbtn.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="src\touch\touch.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\touch\touch.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\wheelbtn.h">
       <SubType>compile</SubType>
     </Compile>
     <None Include="src\ASF\sam\drivers\afec\afec.h">
