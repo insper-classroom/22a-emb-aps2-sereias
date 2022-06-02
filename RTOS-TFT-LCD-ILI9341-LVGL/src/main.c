@@ -43,7 +43,6 @@
 #define LV_VER_RES_MAX          (240)
 //#define RAMP
 
-#define RAIO					0.58/2
 #define VEL_MAX_KMH				5.0f
 #define VEL_MIN_KMH				1.0f
 
@@ -79,6 +78,8 @@ volatile int cancel_clicked = 0;
 volatile int confirm_clicked = 0;
 
 volatile int uma_vez = 1;
+double RAIO	= 0.58/2;
+char buf[32];
 
 
 /************************************************************************/
@@ -145,6 +146,7 @@ double dist = 0;
 double acel = 0;
 double vel_media = 0;
 double vel_total = 0;
+int timeout = 0;
 double vel_anterior = 0;
 int segundos_vel_media = 0;
 
@@ -272,7 +274,7 @@ void create_scr(lv_obj_t * screen) {
 	lv_obj_align(labelVelMed, LV_ALIGN_TOP_RIGHT, -40 , 32);
 	lv_obj_set_style_text_font(labelVelMed, &dseg50, LV_STATE_DEFAULT);
 	lv_obj_set_style_text_color(labelVelMed, lv_color_black(), LV_STATE_DEFAULT);
-	lv_label_set_text_fmt(labelVelMed, "%02d", 25);
+	lv_label_set_text_fmt(labelVelMed, "%2.1f", 0.0);
 	lv_obj_add_style(labelVelMed, &style, 0);
 	
 	// ----------------------- RELÓGIO LABEL ---------------------------------
@@ -327,7 +329,9 @@ static void confirm_handler(lv_event_t * e) {
 		LV_LOG_USER("Clicked");
 		if (confirm_clicked == 0){
 			confirm_clicked = 1;
-			} else {
+			RAIO = (atoi(buf)*0.0254)/2.0;
+			printf("Option: %2.1f", RAIO);
+		} else {
 			confirm_clicked = 0;
 		}
 	}
@@ -343,7 +347,7 @@ static void cancel_handler(lv_event_t * e) {
 		LV_LOG_USER("Clicked");
 		if (cancel_clicked == 0){
 			cancel_clicked = 1;
-			} else {
+		} else {
 			cancel_clicked = 0;
 		}
 	}
@@ -352,12 +356,12 @@ static void cancel_handler(lv_event_t * e) {
 	}
 }
 
+
 static void drop_handler(lv_event_t * e)
 {
 	lv_event_code_t code = lv_event_get_code(e);
 	lv_obj_t * obj = lv_event_get_target(e);
 	if(code == LV_EVENT_VALUE_CHANGED) {
-		char buf[32];
 		lv_dropdown_get_selected_str(obj, buf, sizeof(buf));
 		LV_LOG_USER("Option: %s", buf);
 	}
@@ -448,6 +452,12 @@ static void task_lcd(void *pvParameters) {
 			return_clicked = 0;
 			lv_scr_load(scr1);
 		}
+		
+		if (cancel_clicked || confirm_clicked){
+			cancel_clicked = 0;
+			confirm_clicked= 0;
+			lv_scr_load(scr1);
+		}
 	}
 }
 
@@ -473,7 +483,7 @@ static void task_simulador(void *pvParameters) {
 		if (ramp_up) {
 			//printf("[SIMU] ACELERANDO %d \n", (int) (10*vel));
 			vel += 0.3;
-			} else {
+		} else {
 			//printf("[SIMU] DESACELERANDO %d \n",  (int) (10*vel));
 			vel -= 0.3;
 		}
@@ -559,6 +569,11 @@ static void task_calculos(void *pvParameters) {
 	//printf("DESCIDA\n");
 	TC_init(TC1, ID_TC4, 1, 1);
 	tc_start(TC1, 1);
+	
+	// timeout dos 5 segundos parado
+	TC_init(TC0, ID_TC0, 0, 1);
+	tc_start(TC0, 0);
+	
 	int counter = 0;
 	
 	double tempo_antigo_s = 0;
@@ -569,6 +584,7 @@ static void task_calculos(void *pvParameters) {
 
 	for(;;){
 		if (xSemaphoreTake(xSemaphoredT, 100)){
+			timeout = 0;
 			int pulsos = rtt_read_timer_value(RTT);
 			double tempo_s = pulsos/100.0;
 			
@@ -593,11 +609,12 @@ static void task_calculos(void *pvParameters) {
 			
 			if (segundos_vel_media >= 10){
 				vel_media = vel_total/(double)counter;
-				//printf("Velocidade média [km/h]: %2.1f \n", vel_media);
+				lv_label_set_text_fmt(labelVelMed, "%2.1f", vel_media);
+				printf("Velocidade média [km/h]: %2.1f \n", vel_media);
 				vel_total = 0;
 				segundos_vel_media = 0;
 				counter = 0;
-				} else {
+			} else {
 				counter+=1;
 				vel_total += v;
 			}
@@ -611,11 +628,28 @@ static void task_calculos(void *pvParameters) {
 			printf("Aceleração [m/s^2]: %2.1f \n", acel);
 			
 			//RTT_init(100, 0, RTT_MR_RTTINCIEN);
+		} else if (timeout >= 5){
+			lv_label_set_text_fmt(labelVelInst, "%2.1f", 0.0);
+			vel_total += 0;
+			counter += 1;
+			timeout = 0;
 		} 
+		
 	}
 	
 }
 
+
+void TC0_Handler(void) {
+	/**
+	* Devemos indicar ao TC que a interrupção foi satisfeita.
+	* Isso é realizado pela leitura do status do periférico
+	**/
+	volatile uint32_t status = tc_get_status(TC0, 0);
+
+	/** Muda o estado do LED (pisca) **/
+	timeout++;
+}
 
 
 void TC1_Handler(void) {
@@ -772,36 +806,39 @@ void RTC_init(Rtc *rtc, uint32_t id_rtc, calendar t, uint32_t irq_type) {
 }
 
 void init(void) {
-	//pmc_enable_periph_clk(BUT_PIO_ID);
-	//pio_set_input(BUT_PIO,BUT_PIO_IDX_MASK,PIO_DEFAULT);
-		//
-	//pio_handler_set(BUT_PIO,
-	//BUT_PIO_ID,
-	//BUT_PIO_IDX_MASK,
-	//PIO_IT_FALL_EDGE,
-	//SIMULADOR_callback);
-		//
-	//pio_enable_interrupt(BUT_PIO, BUT_PIO_IDX_MASK);
-	//pio_get_interrupt_status(BUT_PIO);
-		//
-	//NVIC_EnableIRQ(BUT_PIO_ID);
-	//NVIC_SetPriority(BUT_PIO_ID, 4); // Prioridade 4
-	
-	
-	pmc_enable_periph_clk(SIMULADOR_PIO_ID);
-	pio_set_input(SIMULADOR_PIO,SIMULADOR_IDX_MASK,PIO_DEFAULT);
-	
-	pio_handler_set(SIMULADOR_PIO,
-	SIMULADOR_PIO_ID,
-	SIMULADOR_IDX_MASK,
+	pmc_enable_periph_clk(BUT_PIO_ID);
+	pio_set_input(BUT_PIO,BUT_PIO_IDX_MASK,PIO_DEFAULT);
+	pio_set_debounce_filter(BUT_PIO, BUT_PIO_IDX_MASK, 60);
+		
+		
+	pio_handler_set(BUT_PIO,
+	BUT_PIO_ID,
+	BUT_PIO_IDX_MASK,
 	PIO_IT_FALL_EDGE,
 	SIMULADOR_callback);
+		
+	pio_enable_interrupt(BUT_PIO, BUT_PIO_IDX_MASK);
+	pio_get_interrupt_status(BUT_PIO);
+
+		
+	NVIC_EnableIRQ(BUT_PIO_ID);
+	NVIC_SetPriority(BUT_PIO_ID, 4); // Prioridade 4
 	
-	pio_enable_interrupt(SIMULADOR_PIO, SIMULADOR_IDX_MASK);
-	pio_get_interrupt_status(SIMULADOR_PIO);
 	
-	NVIC_EnableIRQ(SIMULADOR_PIO_ID);
-	NVIC_SetPriority(SIMULADOR_PIO_ID, 4); // Prioridade 4
+	//pmc_enable_periph_clk(SIMULADOR_PIO_ID);
+	//pio_set_input(SIMULADOR_PIO,SIMULADOR_IDX_MASK,PIO_DEFAULT);
+	
+	//pio_handler_set(SIMULADOR_PIO,
+	//SIMULADOR_PIO_ID,
+	//SIMULADOR_IDX_MASK,
+	//PIO_IT_FALL_EDGE,
+	//SIMULADOR_callback);
+	//
+	//pio_enable_interrupt(SIMULADOR_PIO, SIMULADOR_IDX_MASK);
+	//pio_get_interrupt_status(SIMULADOR_PIO);
+	//
+	//NVIC_EnableIRQ(SIMULADOR_PIO_ID);
+	//NVIC_SetPriority(SIMULADOR_PIO_ID, 4); // Prioridade 4
 }
 
 /************************************************************************/
