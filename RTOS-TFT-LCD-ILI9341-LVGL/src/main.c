@@ -59,28 +59,6 @@ static lv_color_t buf_1[LV_HOR_RES_MAX * LV_VER_RES_MAX];
 static lv_disp_drv_t disp_drv; 
 static lv_indev_drv_t indev_drv;
 
-static lv_obj_t * labelCron;
-static lv_obj_t * labelDist;
-static lv_obj_t * labelDistText;
-static lv_obj_t * labelClock;
-static lv_obj_t * labelVelMed;
-static lv_obj_t * labelVelMedText;
-static lv_obj_t * labelVelInst;
-static lv_obj_t * labelVelInstText;
-
-volatile int play_clicked = 0;
-volatile int replay_clicked = 0;
-
-int pulsos = 0;
-
-volatile int return_clicked = 0;
-volatile int cancel_clicked = 0;
-volatile int confirm_clicked = 0;
-
-volatile int uma_vez = 1;
-double RAIO	= 0.58/2;
-char buf[32];
-
 
 /************************************************************************/
 /* RTOS                                                                 */
@@ -117,7 +95,7 @@ extern void vApplicationMallocFailedHook(void) {
 	configASSERT( ( volatile void * ) NULL );
 }
 
-/***************** Globais ***************************/
+/*------------------------------------------------- GLOBAIS ------------------------------------------------*/
 
 typedef struct  {
 	uint32_t year;
@@ -129,17 +107,23 @@ typedef struct  {
 	uint32_t second;
 } calendar;
 
+SemaphoreHandle_t xSemaphoreRTC;
+volatile uint32_t current_hour, current_min, current_sec;
+volatile uint32_t current_year, current_month, current_day, current_week;
+
+SemaphoreHandle_t xSemaphoreTC;
+volatile uint32_t alarm_sec, alarm_h, alarm_min;
+
+SemaphoreHandle_t xSemaphoredT;
+SemaphoreHandle_t xSemaphoreVelMedia;
+
 static lv_obj_t * scr1;  // screen 1
 static lv_obj_t * scr2;  // screen 2
 
-volatile uint32_t current_hour, current_min, current_sec;
-volatile uint32_t current_year, current_month, current_day, current_week;
-volatile uint32_t alarm_sec, alarm_h, alarm_min;
-
-SemaphoreHandle_t xSemaphoreRTC;
-SemaphoreHandle_t xSemaphoreTC;
-SemaphoreHandle_t xSemaphoreButPlay;
-SemaphoreHandle_t xSemaphoredT;
+volatile int uma_vez = 1;
+int segundos_vel_media = 0;
+double RAIO	= 0.58/2;
+char buf[32];
 
 SemaphoreHandle_t xSemaphorePlay;
 SemaphoreHandle_t xSemaphoreReplay;
@@ -148,24 +132,41 @@ SemaphoreHandle_t xSemaphoreReturn;
 SemaphoreHandle_t xSemaphoreConfirm;
 SemaphoreHandle_t xSemaphoreCancel;
 
-int t = 0;
-double dist = 0;
-double acel = 0;
-double vel_media = 0;
-double vel_total = 0;
-int timeout = 0;
-double vel_anterior = 0;
-int segundos_vel_media = 0;
 
-/********************* Prototypes **********************************************/
+// Ao invés de fazer vários semáforos, faz uma fila que recebe um head indicando o botão e o status.
+
+typedef struct botoes{
+	char head[1];
+	int status;
+} buttons;
+	
+
+static lv_obj_t * labelCron;
+static lv_obj_t * labelDist;
+static lv_obj_t * labelDistText;
+static lv_obj_t * labelClock;
+static lv_obj_t * labelVelMed;
+static lv_obj_t * labelVelMedText;
+static lv_obj_t * labelVelInst;
+static lv_obj_t * labelVelInstText;
+
+volatile int play_clicked = 0;
+volatile int replay_clicked = 0;
+
+volatile int return_clicked = 0;
+volatile int cancel_clicked = 0;
+volatile int confirm_clicked = 0;
+
+
+/*------------------------------------------------------- PROTOTYPES -----------------------------------------------------*/
 void RTC_init(Rtc *rtc, uint32_t id_rtc, calendar t, uint32_t irq_type);
 void RTC_Handler(void);
 void TC_init(Tc * TC, int ID_TC, int TC_CHANNEL, int freq);
 void RTT_init(float freqPrescale, uint32_t IrqNPulses, uint32_t rttIRQSource);
 
-/************************************************************************/
-/* HANDLERS                                                             */
-/************************************************************************/
+
+/* ------------------------------------- HANDLERS DAS TELAS -----------------------------------------------------------------*/
+
 
 static void play_handler(lv_event_t * e) {
 	lv_event_code_t code = lv_event_get_code(e);
@@ -267,6 +268,8 @@ static void drop_handler(lv_event_t * e)
 	}
 }
 
+
+/* ---------------------------------------------- TODOS OS ELEMENTOS DA TELA 1 -------------------------------------------------------------------*/
 
 void create_scr(lv_obj_t * screen) {
 	static lv_style_t style;
@@ -378,6 +381,8 @@ void create_scr(lv_obj_t * screen) {
 	lv_obj_clear_flag(screen, LV_OBJ_FLAG_SCROLLABLE);
 }
 
+/* --------------------------------------------------- TODOS OS ELEMENTOS DA TELA 2 ------------------------------------------------------------------*/
+
 void create_scr2(lv_obj_t * screen) {
 
 	static lv_style_t style;
@@ -433,10 +438,8 @@ void create_scr2(lv_obj_t * screen) {
 }
 
 
+/* ----------------------------------------------------------- TASKS -----------------------------------------------------------*/
 
-/************************************************************************/
-/* TASKS                                                                */
-/************************************************************************/
 
 static void task_lcd(void *pvParameters) {
 	int px, py;
@@ -581,45 +584,45 @@ static void task_calculos(void *pvParameters) {
 	TC_init(TC1, ID_TC4, 1, 1);
 	tc_start(TC1, 1);
 	
-	// timeout dos 5 segundos parado
-	TC_init(TC0, ID_TC0, 0, 1);
-	tc_start(TC0, 0);
-	
+
 	int counter = 0;
-	
+	double dist = 0;
 	double tempo_antigo_s = 0;
 	double dt;
+	double v;
+	double v_metros;
+	int pulsos;
+	double vel_total = 0;
+	double vel_anterior = 0;
+	double vel_media = 0;
 	
 	RTT_init(100, 0, RTT_MR_RTTINCIEN);
 	int toggle = 0;
 
 	for(;;){
-		if (xSemaphoreTake(xSemaphoredT, 100)){
-			timeout = 0;
-			int pulsos = rtt_read_timer_value(RTT);
+		if (xSemaphoreTake(xSemaphoredT, 5000)){
+			pulsos = rtt_read_timer_value(RTT);
 			double tempo_s = pulsos/100.0;
 			
 			dt = tempo_s - tempo_antigo_s;
 			tempo_antigo_s = tempo_s;
 			
 			double f = 1/(double)dt;
-			//double w = (2*PI*f);
 			double w = 2*PI/dt;  // vel angular
 			double v_metros = (RAIO*w); //vel linear em [m/s]
 			double v = (RAIO*w)*3.6; //vel linear em [km/h]
-			//double v = ((2*PI*RAIO)/tempo_s)*3.6;
 
 			dist += (2*PI*RAIO*dt)/1000.0; //era em metros, coloquei pra km
 			lv_label_set_text_fmt(labelDist, "%.1f", dist);
 			
 
-			acel = (v_metros - vel_anterior)/(double)dt ;// aceleração em metros/s^2
+			double acel = (v_metros - vel_anterior)/(double)dt ;// aceleração em metros/s^2
 			
 			
 			vel_anterior = v_metros;
 			
 			
-			if (segundos_vel_media >= 10){
+			if (xSemaphoreTake(xSemaphoreVelMedia, 0)){
 				vel_media = vel_total/(double)counter;
 				lv_label_set_text_fmt(labelVelMed, "%2.1f", vel_media);
 				printf("Velocidade média [km/h]: %2.1f \n", vel_media);
@@ -639,29 +642,18 @@ static void task_calculos(void *pvParameters) {
 			printf("Distância [km]: %2.1f \n", dist);
 			printf("Aceleração [m/s^2]: %2.1f \n", acel);
 			
-			//RTT_init(100, 0, RTT_MR_RTTINCIEN);
-		} else if (timeout >= 5){
+		} else {
 			lv_label_set_text_fmt(labelVelInst, "%2.1f", 0.0);
 			vel_total += 0;
-			counter += 1;
-			timeout = 0;
-		} 
+			counter +=1;
+		}
 		
 	}
 	
 }
 
 
-void TC0_Handler(void) {
-	/**
-	* Devemos indicar ao TC que a interrupção foi satisfeita.
-	* Isso é realizado pela leitura do status do periférico
-	**/
-	volatile uint32_t status = tc_get_status(TC0, 0);
-
-	/** Muda o estado do LED (pisca) **/
-	timeout++;
-}
+/* ---------------------------------------------- HANDLERS DOS PERIFÉRICOS: TC, RTT E RTC ----------------------------------------------*/
 
 
 void TC1_Handler(void) {
@@ -699,13 +691,53 @@ void TC4_Handler(void) {
 	volatile uint32_t status = tc_get_status(TC1, 1);
 
 	segundos_vel_media += 1;
-	//if segundos_vel_media > 10 {
-		//segundos_vel_media = 0
-		//libera semaforo
-	//} else
-	 //segundos_vel_media++
+	if (segundos_vel_media > 10){
+		segundos_vel_media = 0;
+		BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+		xSemaphoreGiveFromISR(xSemaphoreVelMedia, &xHigherPriorityTaskWoken);
+	} else {
+		segundos_vel_media++;
+	}
 }
 
+void RTT_Handler(void) {
+	uint32_t ul_status;
+
+	/* Get RTT status - ACK */
+	ul_status = rtt_get_status(RTT);
+
+	/* IRQ due to Time has changed */
+	if ((ul_status & RTT_SR_RTTINC) == RTT_SR_RTTINC) {
+		
+	}
+}
+
+
+void RTC_Handler(void) {
+	uint32_t ul_status = rtc_get_status(RTC);
+	
+	/* seccond tick */
+	if ((ul_status & RTC_SR_SEC) == RTC_SR_SEC) {
+		BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+		xSemaphoreGiveFromISR(xSemaphoreRTC, &xHigherPriorityTaskWoken);
+		
+	}
+	
+	/* Time or date alarm */
+	if ((ul_status & RTC_SR_ALARM) == RTC_SR_ALARM) {
+		// o código para irq de alame vem aqui
+	}
+
+	rtc_clear_status(RTC, RTC_SCCR_SECCLR);
+	rtc_clear_status(RTC, RTC_SCCR_ALRCLR);
+	rtc_clear_status(RTC, RTC_SCCR_ACKCLR);
+	rtc_clear_status(RTC, RTC_SCCR_TIMCLR);
+	rtc_clear_status(RTC, RTC_SCCR_CALCLR);
+	rtc_clear_status(RTC, RTC_SCCR_TDERRCLR);
+}
+
+
+/* ---------------------------------------------------- INITS DOS PERIFÉRICOS: TC, RTT E RTC ----------------------------------------- */
 
 
 void TC_init(Tc * TC, int ID_TC, int TC_CHANNEL, int freq){
@@ -725,21 +757,6 @@ void TC_init(Tc * TC, int ID_TC, int TC_CHANNEL, int freq){
 	NVIC_SetPriority(ID_TC, 4);
 	NVIC_EnableIRQ((IRQn_Type) ID_TC);
 	tc_enable_interrupt(TC, TC_CHANNEL, TC_IER_CPCS);
-}
-
-
-
-
-void RTT_Handler(void) {
-	uint32_t ul_status;
-
-	/* Get RTT status - ACK */
-	ul_status = rtt_get_status(RTT);
-
-	/* IRQ due to Time has changed */
-	if ((ul_status & RTT_SR_RTTINC) == RTT_SR_RTTINC) {		
-		
-	}
 }
 
 void RTT_init(float freqPrescale, uint32_t IrqNPulses, uint32_t rttIRQSource) {
@@ -770,31 +787,6 @@ void RTT_init(float freqPrescale, uint32_t IrqNPulses, uint32_t rttIRQSource) {
 	
 }
 
-
-void RTC_Handler(void) {
-	uint32_t ul_status = rtc_get_status(RTC);
-	
-	/* seccond tick */
-	if ((ul_status & RTC_SR_SEC) == RTC_SR_SEC) {
-		BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-		xSemaphoreGiveFromISR(xSemaphoreRTC, &xHigherPriorityTaskWoken);
-		
-	}
-	
-	/* Time or date alarm */
-	if ((ul_status & RTC_SR_ALARM) == RTC_SR_ALARM) {
-		// o código para irq de alame vem aqui
-	}
-
-	rtc_clear_status(RTC, RTC_SCCR_SECCLR);
-	rtc_clear_status(RTC, RTC_SCCR_ALRCLR);
-	rtc_clear_status(RTC, RTC_SCCR_ACKCLR);
-	rtc_clear_status(RTC, RTC_SCCR_TIMCLR);
-	rtc_clear_status(RTC, RTC_SCCR_CALCLR);
-	rtc_clear_status(RTC, RTC_SCCR_TDERRCLR);
-}
-
-
 void RTC_init(Rtc *rtc, uint32_t id_rtc, calendar t, uint32_t irq_type) {
 	/* Configura o PMC */
 	pmc_enable_periph_clk(ID_RTC);
@@ -815,6 +807,8 @@ void RTC_init(Rtc *rtc, uint32_t id_rtc, calendar t, uint32_t irq_type) {
 	/* Ativa interrupcao via alarme */
 	rtc_enable_interrupt(rtc,  irq_type);
 }
+
+/* -------------------------------------------------------------- INIT DO PINO CONFIGURADO PARA LEITURA DO SINAL --------------------------- */
 
 void init(void) {
 	pmc_enable_periph_clk(BUT_PIO_ID);
@@ -852,9 +846,8 @@ void init(void) {
 	//NVIC_SetPriority(SIMULADOR_PIO_ID, 4); // Prioridade 4
 }
 
-/************************************************************************/
-/* configs                                                              */
-/************************************************************************/
+
+/* ------------------------------------------------- CONFIGS DO LCD E CONSOLE  -------------------------------------------------------- */
 
 static void configure_lcd(void) {
 	/**LCD pin configure on SPI*/
@@ -884,9 +877,8 @@ static void configure_console(void) {
 	setbuf(stdout, NULL);
 }
 
-/************************************************************************/
-/* port lvgl                                                            */
-/************************************************************************/
+
+/* --------------------------------------------------- PORT LVGL   ------------------------------------------------------ */
 
 void my_flush_cb(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color_t * color_p) {
 	ili9341_set_top_left_limit(area->x1, area->y1);   ili9341_set_bottom_right_limit(area->x2, area->y2);
@@ -929,9 +921,9 @@ void configure_lvgl(void) {
 	lv_indev_t * my_indev = lv_indev_drv_register(&indev_drv);
 }
 
-/************************************************************************/
-/* main                                                                 */
-/************************************************************************/
+
+/* ----------------------------------------------------- MAIN ---------------------------------------------------------------------  */
+
 int main(void) {
 	/* board and sys init */
 	board_init();
@@ -953,28 +945,31 @@ int main(void) {
 	
 	xSemaphorePlay = xSemaphoreCreateBinary();
 	if (xSemaphorePlay == NULL)
-	printf("falha em criar o semaforo \n");
+		printf("falha em criar o semaforo \n");
 	
 	xSemaphoreReplay = xSemaphoreCreateBinary();
 	if (xSemaphoreReplay == NULL)
-	printf("falha em criar o semaforo \n");
+		printf("falha em criar o semaforo \n");
 	
 	xSemaphoreWheel = xSemaphoreCreateBinary();
 	if (xSemaphoreWheel == NULL)
-	printf("falha em criar o semaforo \n");
+		printf("falha em criar o semaforo \n");
 	
 	xSemaphoreConfirm = xSemaphoreCreateBinary();
 	if (xSemaphoreConfirm == NULL)
-	printf("falha em criar o semaforo \n");
+		printf("falha em criar o semaforo \n");
 	
 	xSemaphoreCancel = xSemaphoreCreateBinary();
 	if (xSemaphoreCancel == NULL)
-	printf("falha em criar o semaforo \n");
+		printf("falha em criar o semaforo \n");
 	
 	xSemaphoreReturn = xSemaphoreCreateBinary();
 	if (xSemaphoreReturn == NULL)
-	printf("falha em criar o semaforo \n");
-
+		printf("falha em criar o semaforo \n");
+	
+	xSemaphoreVelMedia = xSemaphoreCreateBinary();
+	if (xSemaphoreReturn == NULL)
+		printf("falha em criar o semaforo \n");
 
 	/* LCd, touch and lvgl init*/
 	configure_lcd();
