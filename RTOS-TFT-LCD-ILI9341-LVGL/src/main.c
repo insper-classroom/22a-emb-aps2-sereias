@@ -136,10 +136,12 @@ SemaphoreHandle_t xSemaphoreCancel;
 // Ao invés de fazer vários semáforos, faz uma fila que recebe um head indicando o botão e o status.
 
 typedef struct botoes{
-	char head[1];
+	char head;
 	int status;
 } buttons;
 	
+QueueHandle_t xQueueBut;
+
 
 static lv_obj_t * labelCron;
 static lv_obj_t * labelDist;
@@ -169,19 +171,27 @@ void RTT_init(float freqPrescale, uint32_t IrqNPulses, uint32_t rttIRQSource);
 
 
 static void play_handler(lv_event_t * e) {
+	buttons playBut;
+	char head_play = 'P';
+	playBut.head = head_play;
+	//playBut.status = 0;	
+		
 	lv_event_code_t code = lv_event_get_code(e);
-
+	
 	if(code == LV_EVENT_CLICKED) {
+		//playBut.status = 1;
+		printf("%d \n", 1);
+
 		LV_LOG_USER("Clicked");
-		if (play_clicked == 0){
-			play_clicked = 1;
-		} else {
-			play_clicked = 0;
-		}
 	}
 	else if(code == LV_EVENT_VALUE_CHANGED) {
-		LV_LOG_USER("Toggled");
+		//playBut.status = 0;
+		printf("%d \n", 0);
 	}
+
+	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+	xQueueSendFromISR(xQueueBut, &playBut, xHigherPriorityTaskWoken);
+
 }
 
 static void replay_handler(lv_event_t * e) {
@@ -535,17 +545,26 @@ static void task_RTC(void *pvParameters) {
 
 
 static void task_TC(void *pvParameters) {	
-	int pclicked = 0;
+	//int pclicked = 0;
+	buttons but_play;
 	for (;;) {
 		//rtc_get_time(RTC, &current_hour,&current_min, &current_sec);
-		if (play_clicked && uma_vez){
-			pclicked =!pclicked;
-
-			TC_init(TC0, ID_TC1, 1, 1);
-			tc_start(TC0, 1);
-			uma_vez = 0;
-			
-		} 
+		if (xQueueReceive(xQueueBut, &(but_play), 10) && uma_vez) {
+			printf("Head botão apertado: %c. Status: %d", but_play.head, but_play.status);
+			if (but_play.head == 'P' && but_play.status == 1){
+				TC_init(TC0, ID_TC1, 1, 1);
+				tc_start(TC0, 1);
+				uma_vez = 0;				
+			}
+		}
+		//if (play_clicked && uma_vez){
+			////pclicked =!pclicked;
+//
+			//TC_init(TC0, ID_TC1, 1, 1);
+			//tc_start(TC0, 1);
+			//uma_vez = 0;
+			//
+		//} 
 		
 		if (replay_clicked){
 			tc_stop(TC0, 1);
@@ -661,12 +680,21 @@ void TC1_Handler(void) {
 	* Devemos indicar ao TC que a interrupção foi satisfeita.
 	* Isso é realizado pela leitura do status do periférico
 	**/
+	buttons but_play;
+	
 	volatile uint32_t status = tc_get_status(TC0, 1);
 	
-	if (!play_clicked) {
-		tc_stop(TC0, 1);
-		uma_vez = 1;
+	if (xQueueReceive(xQueueBut, &(but_play), 10)) {
+		if (but_play.head == 'P' && but_play.status == 0){
+			tc_stop(TC0, 1);
+			uma_vez = 1;
+		}
 	}
+	
+	//if (!play_clicked) {
+		//tc_stop(TC0, 1);
+		//uma_vez = 1;
+	//}
 
 	/** Muda o estado do LED (pisca) **/
 		
@@ -970,6 +998,10 @@ int main(void) {
 	xSemaphoreVelMedia = xSemaphoreCreateBinary();
 	if (xSemaphoreReturn == NULL)
 		printf("falha em criar o semaforo \n");
+		
+	xQueueBut = xQueueCreate(1, sizeof(buttons));
+	if (xQueueBut == NULL)
+		printf("Falha em criar a queue xQueueBut \n");
 
 	/* LCd, touch and lvgl init*/
 	configure_lcd();
