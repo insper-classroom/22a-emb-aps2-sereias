@@ -40,6 +40,22 @@
 #define BUT_PIO_IDX_MASK		(1u << BUT_PIO_IDX)
 
 
+#define RED_PIO					PIOB
+#define RED_PIO_ID				ID_PIOB
+#define RED_IDX					2
+#define RED_IDX_MASK			(1 << RED_IDX)
+
+#define GREEN_PIO				PIOC
+#define GREEN_PIO_ID			ID_PIOC
+#define GREEN_IDX				30
+#define GREEN_IDX_MASK			(1 << GREEN_IDX)
+
+#define BLUE_PIO				PIOC
+#define BLUE_PIO_ID				ID_PIOC
+#define BLUE_IDX				17
+#define BLUE_IDX_MASK			(1 << BLUE_IDX)
+
+
 /************************************************************************/
 /* LCD / LVGL                                                           */
 /************************************************************************/
@@ -425,18 +441,18 @@ static void task_lcd(void *pvParameters) {
 		lv_tick_inc(50);
 		lv_task_handler();
 		vTaskDelay(50);
-		if (xSemaphoreTake(xSemaphoreWheel, 100)){
+		if (xSemaphoreTake(xSemaphoreWheel, 0)){
 			printf("CLIQUEI \n");
 			scr2  = lv_obj_create(NULL);
 			create_scr2(scr2);
 			lv_scr_load(scr2);
 		}
 			
-		if (xSemaphoreTake(xSemaphoreReturn, 100)) {
+		if (xSemaphoreTake(xSemaphoreReturn, 0)) {
 			lv_scr_load(scr1);
 		}
 		
-		if ((xSemaphoreTake(xSemaphoreConfirm, 100)) || (xSemaphoreTake(xSemaphoreCancel, 100))){
+		if ((xSemaphoreTake(xSemaphoreConfirm, 0)) || (xSemaphoreTake(xSemaphoreCancel, 0))){
 			lv_scr_load(scr1);
 		}
 	}
@@ -505,45 +521,46 @@ static void task_RTC(void *pvParameters) {
 
 
 static void task_TC(void *pvParameters) {	
-	volatile int uma_vez = 1;
+	int play_ativado = 0;
+	
+	static lv_style_t style;
+	lv_style_init(&style);
 	
 	for (;;) {
 		
-		if (xSemaphoreTake(xSemaphorePlay, 100)){
-			//printf("ENTREI");
-			if (uma_vez) {
+		if (xSemaphoreTake(xSemaphorePlay, 0)){
+			play_ativado =! play_ativado;
+			if (play_ativado){
 				TC_init(TC0, ID_TC1, 1, 1);
-				tc_start(TC0, 1);
-				
-				lv_obj_t * ready_logo = lv_img_create(scr1);
-				lv_img_set_src(ready_logo, &ready_img);
-				lv_obj_align(ready_logo, LV_ALIGN_BOTTOM_RIGHT, 70, 15);
-				
-				lv_obj_t * stop_logo = lv_img_create(scr1);
-				lv_obj_add_event_cb(stop_logo, stop_handler, LV_EVENT_ALL, NULL);
-				lv_obj_align(stop_logo, LV_ALIGN_BOTTOM_LEFT, 15, 60);
-				lv_imgbtn_set_src(stop_logo, LV_IMGBTN_STATE_RELEASED, &stopbtn, NULL, NULL);
-				
-				uma_vez = 0;
+				tc_start(TC0, 1);				
+			} else {
+				tc_stop(TC0, 1);
 			}
-		} 
-		
-		if (xSemaphoreTake(xSemaphoreStop, 100)) {
-			tc_stop(TC0, 1);
-			uma_vez = 1;
 		}
+				
+			//play_ativado = 1;
+				
+			//lv_obj_t * ready_logo = lv_img_create(scr1);
+			//lv_img_set_src(ready_logo, &ready_img);
+			//lv_obj_align(ready_logo, LV_ALIGN_BOTTOM_RIGHT, 70, 15);
+			//
+			//lv_obj_t * stop_logo = lv_img_create(scr1);
+			//lv_obj_add_event_cb(stop_logo, stop_handler, LV_EVENT_ALL, NULL);
+			//lv_obj_align(stop_logo, LV_ALIGN_BOTTOM_LEFT, 15, 60);
+			//lv_imgbtn_set_src(stop_logo, LV_IMGBTN_STATE_RELEASED, &stopbtn, NULL, NULL);
+			//lv_obj_add_style(stop_logo, &style, LV_STATE_PRESSED);	
+
 		
-		if (xSemaphoreTake(xSemaphoreReplay,100)){
+		if (xSemaphoreTake(xSemaphoreReplay,0)){
 			tc_stop(TC0, 1);
 			alarm_sec = 0;
 			alarm_min = 0;
 			alarm_h = 0;
-			uma_vez = 1;
 		}
 
 
 		/* aguarda por tempo inderteminado até a liberacao do semaforo */
-		if (xSemaphoreTake(xSemaphoreTC, 1000 / portTICK_PERIOD_MS)){
+		if (xSemaphoreTake(xSemaphoreTC, 1000)){
 			lv_label_set_text_fmt(labelCron, "%02d:%02d", alarm_h, alarm_min);
 		} else {
 			lv_label_set_text_fmt(labelCron, "%02d %02d", alarm_h, alarm_min);
@@ -624,22 +641,31 @@ static void task_calculos(void *pvParameters) {
 			printf("Distância [km]: %2.1f \n", dist);
 			printf("Aceleração [m/s^2]: %2.1f \n", acel);
 			
-			if( acel > 0.5) {
+			if( acel >= 0.1) {
 				lv_obj_t * acel_logo = lv_img_create(scr1);
 				lv_img_set_src(acel_logo, &acel_img);
 				lv_obj_align(acel_logo, LV_ALIGN_TOP_RIGHT, -100, 15);
+				pio_clear(GREEN_PIO, GREEN_IDX_MASK);
+				pio_set(BLUE_PIO, BLUE_IDX_MASK);
+				pio_set(RED_PIO, RED_IDX_MASK);
 			}
 			
-			else if (acel < -0.2) {
+			else if (acel < 0) {
 				lv_obj_t * desacel_logo = lv_img_create(scr1);
 				lv_img_set_src(desacel_logo, &desacel_img);
 				lv_obj_align(desacel_logo, LV_ALIGN_TOP_RIGHT, -100, 15);
+				pio_clear(RED_PIO, RED_IDX_MASK);
+				pio_set(BLUE_PIO, BLUE_IDX_MASK);
+				pio_set(GREEN_PIO, GREEN_IDX_MASK);
 			}
 			
 			else if (acel == 0) {
 				lv_obj_t * stable_acel_logo = lv_img_create(scr1);
 				lv_img_set_src(stable_acel_logo, &stable_img);
 				lv_obj_align(stable_acel_logo, LV_ALIGN_TOP_RIGHT, -100, 15);
+				pio_clear(BLUE_PIO, BLUE_IDX_MASK);
+				pio_set(RED_PIO, RED_IDX_MASK);
+				pio_set(GREEN_PIO, GREEN_IDX_MASK);
 			}
 			
 		} else {
@@ -657,8 +683,12 @@ static void task_calculos(void *pvParameters) {
 
 
 void TC1_Handler(void) {
-	volatile uint32_t status = tc_get_status(TC0, 1);
 	
+	/**
+	* Devemos indicar ao TC que a interrupção foi satisfeita.
+	* Isso é realizado pela leitura do status do periférico
+	**/
+	volatile uint32_t status = tc_get_status(TC0, 1);
 
 	/** Muda o estado do LED (pisca) **/
 		
@@ -807,6 +837,13 @@ void init(void) {
 	pio_set_input(BUT_PIO,BUT_PIO_IDX_MASK,PIO_DEFAULT);
 	pio_set_debounce_filter(BUT_PIO, BUT_PIO_IDX_MASK, 60);
 		
+	pmc_enable_periph_clk(BLUE_PIO_ID);
+	pmc_enable_periph_clk(RED_PIO_ID);
+	pmc_enable_periph_clk(GREEN_PIO_ID);
+	
+	pio_set_output(BLUE_PIO, BLUE_IDX_MASK, 1, 0, 0);
+	pio_set_output(RED_PIO, RED_IDX_MASK, 1, 0, 0);
+	pio_set_output(GREEN_PIO, GREEN_IDX_MASK, 1, 0, 0);		
 		
 	pio_handler_set(BUT_PIO,
 	BUT_PIO_ID,
