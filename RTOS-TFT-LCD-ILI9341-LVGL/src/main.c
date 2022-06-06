@@ -164,6 +164,9 @@ static lv_obj_t * labelVelMed;
 static lv_obj_t * labelVelMedText;
 static lv_obj_t * labelVelInst;
 static lv_obj_t * labelVelInstText;
+static lv_obj_t * play_logo;
+static lv_obj_t * ready_logo;
+
 
 /*------------------------------------------------------- PROTOTYPES -----------------------------------------------------*/
 void RTC_init(Rtc *rtc, uint32_t id_rtc, calendar t, uint32_t irq_type);
@@ -267,7 +270,7 @@ void create_scr(lv_obj_t * screen) {
 	
 	// -------------------- BUTTON INITS --------------------
 	
-	lv_obj_t * play_logo = lv_imgbtn_create(screen);
+	play_logo = lv_imgbtn_create(screen);
 	lv_obj_t * replay_logo = lv_imgbtn_create(screen);
 	lv_obj_t * wheel_logo = lv_imgbtn_create(screen);
 	lv_obj_t * cronometro_img = lv_img_create(screen);
@@ -528,31 +531,25 @@ static void task_TC(void *pvParameters) {
 	
 	for (;;) {
 		
-		if (xSemaphoreTake(xSemaphorePlay, 0)){
+		if (xSemaphoreTake(xSemaphorePlay, 10)){
 			play_ativado =! play_ativado;
 			if (play_ativado){
+				lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &playbtn, NULL, NULL);
 				TC_init(TC0, ID_TC1, 1, 1);
-				tc_start(TC0, 1);				
+				tc_start(TC0, 1);		
+				ready_logo= lv_img_create(scr1);
+				lv_img_set_src(ready_logo, &ready_img);
+				lv_obj_align(ready_logo, LV_ALIGN_BOTTOM_RIGHT, 70, 15);
 			} else {
 				tc_stop(TC0, 1);
+				lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &stopbtn, NULL, NULL);
 			}
 		}
-				
-			//play_ativado = 1;
-				
-			//lv_obj_t * ready_logo = lv_img_create(scr1);
-			//lv_img_set_src(ready_logo, &ready_img);
-			//lv_obj_align(ready_logo, LV_ALIGN_BOTTOM_RIGHT, 70, 15);
-			//
-			//lv_obj_t * stop_logo = lv_img_create(scr1);
-			//lv_obj_add_event_cb(stop_logo, stop_handler, LV_EVENT_ALL, NULL);
-			//lv_obj_align(stop_logo, LV_ALIGN_BOTTOM_LEFT, 15, 60);
-			//lv_imgbtn_set_src(stop_logo, LV_IMGBTN_STATE_RELEASED, &stopbtn, NULL, NULL);
-			//lv_obj_add_style(stop_logo, &style, LV_STATE_PRESSED);	
 
 		
 		if (xSemaphoreTake(xSemaphoreReplay,0)){
 			tc_stop(TC0, 1);
+			lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &playbtn, NULL, NULL);
 			alarm_sec = 0;
 			alarm_min = 0;
 			alarm_h = 0;
