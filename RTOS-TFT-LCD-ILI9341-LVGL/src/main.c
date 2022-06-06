@@ -19,6 +19,11 @@
 #include "imgs/logoimg.h"
 #include "imgs/distimg.h"
 #include "imgs/velintimg.h"
+#include "imgs/acel_img.h"
+#include "imgs/desacel_img.h"
+#include "imgs/stable_img.h"
+#include "imgs/ready_img.h"
+#include "imgs/stopbtn.h"
 
 /************************************************************************/
 /* DEFINES PINOS                                                        */
@@ -120,26 +125,20 @@ SemaphoreHandle_t xSemaphoreVelMedia;
 static lv_obj_t * scr1;  // screen 1
 static lv_obj_t * scr2;  // screen 2
 
-volatile int uma_vez = 1;
 int segundos_vel_media = 0;
 double RAIO	= 0.58/2;
 char buf[32];
 
 SemaphoreHandle_t xSemaphorePlay;
+SemaphoreHandle_t xSemaphoreStop;
 SemaphoreHandle_t xSemaphoreReplay;
 SemaphoreHandle_t xSemaphoreWheel;
 SemaphoreHandle_t xSemaphoreReturn;
 SemaphoreHandle_t xSemaphoreConfirm;
 SemaphoreHandle_t xSemaphoreCancel;
-
-
-// Ao invés de fazer vários semáforos, faz uma fila que recebe um head indicando o botão e o status.
-
-typedef struct botoes{
-	char head[1];
-	int status;
-} buttons;
 	
+QueueHandle_t xQueueBut;
+
 
 static lv_obj_t * labelCron;
 static lv_obj_t * labelDist;
@@ -149,14 +148,6 @@ static lv_obj_t * labelVelMed;
 static lv_obj_t * labelVelMedText;
 static lv_obj_t * labelVelInst;
 static lv_obj_t * labelVelInstText;
-
-volatile int play_clicked = 0;
-volatile int replay_clicked = 0;
-
-volatile int return_clicked = 0;
-volatile int cancel_clicked = 0;
-volatile int confirm_clicked = 0;
-
 
 /*------------------------------------------------------- PROTOTYPES -----------------------------------------------------*/
 void RTC_init(Rtc *rtc, uint32_t id_rtc, calendar t, uint32_t irq_type);
@@ -170,17 +161,21 @@ void RTT_init(float freqPrescale, uint32_t IrqNPulses, uint32_t rttIRQSource);
 
 static void play_handler(lv_event_t * e) {
 	lv_event_code_t code = lv_event_get_code(e);
-
+	
 	if(code == LV_EVENT_CLICKED) {
 		LV_LOG_USER("Clicked");
-		if (play_clicked == 0){
-			play_clicked = 1;
-		} else {
-			play_clicked = 0;
-		}
+		BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+		xSemaphoreGiveFromISR(xSemaphorePlay, xHigherPriorityTaskWoken);
 	}
-	else if(code == LV_EVENT_VALUE_CHANGED) {
-		LV_LOG_USER("Toggled");
+}
+
+static void stop_handler(lv_event_t * e) {
+	lv_event_code_t code = lv_event_get_code(e);
+	
+	if(code == LV_EVENT_CLICKED) {
+		LV_LOG_USER("Clicked");
+		BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+		xSemaphoreGiveFromISR(xSemaphoreStop, xHigherPriorityTaskWoken);
 	}
 }
 
@@ -189,12 +184,8 @@ static void replay_handler(lv_event_t * e) {
 
 	if(code == LV_EVENT_CLICKED) {
 		LV_LOG_USER("Clicked");
-	//	if (replay_clicked == 0){
-			replay_clicked = 1;
-		//} 
-	}
-	else if(code == LV_EVENT_VALUE_CHANGED) {
-		LV_LOG_USER("Toggled");
+		BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+		xSemaphoreGiveFromISR(xSemaphoreReplay, xHigherPriorityTaskWoken);
 	}
 }
 
@@ -204,7 +195,7 @@ static void wheel_handler(lv_event_t * e) {
 	if(code == LV_EVENT_CLICKED) {
 		LV_LOG_USER("Clicked");
 		BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-		xSemaphoreGiveFromISR(xSemaphoreWheel, xHigherPriorityTaskWoken); 
+		xSemaphoreGive(xSemaphoreWheel); 
 	}
 }
 
@@ -213,32 +204,20 @@ static void return_handler(lv_event_t * e) {
 
 	if(code == LV_EVENT_CLICKED) {
 		LV_LOG_USER("Clicked");
-		if (return_clicked == 0){
-			return_clicked = 1;
-			} else {
-			return_clicked = 0;
-		}
-	}
-	else if(code == LV_EVENT_VALUE_CHANGED) {
-		LV_LOG_USER("Toggled");
+		BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+		xSemaphoreGive(xSemaphoreReturn);
 	}
 }
 
 static void confirm_handler(lv_event_t * e) {
 	lv_event_code_t code = lv_event_get_code(e);
-
+	
 	if(code == LV_EVENT_CLICKED) {
 		LV_LOG_USER("Clicked");
-		if (confirm_clicked == 0){
-			confirm_clicked = 1;
-			RAIO = (atoi(buf)*0.0254)/2.0;
-			printf("Option: %2.1f", RAIO);
-			} else {
-			confirm_clicked = 0;
-		}
-	}
-	else if(code == LV_EVENT_VALUE_CHANGED) {
-		LV_LOG_USER("Toggled");
+		RAIO = (atoi(buf)*0.0254)/2.0;
+		printf("Option: %2.1f", RAIO);
+		BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+		xSemaphoreGive(xSemaphoreConfirm);
 	}
 }
 
@@ -247,14 +226,8 @@ static void cancel_handler(lv_event_t * e) {
 
 	if(code == LV_EVENT_CLICKED) {
 		LV_LOG_USER("Clicked");
-		if (cancel_clicked == 0){
-			cancel_clicked = 1;
-			} else {
-			cancel_clicked = 0;
-		}
-	}
-	else if(code == LV_EVENT_VALUE_CHANGED) {
-		LV_LOG_USER("Toggled");
+		BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+		xSemaphoreGive(xSemaphoreCancel);
 	}
 }
 
@@ -343,7 +316,7 @@ void create_scr(lv_obj_t * screen) {
 	labelVelMedText = lv_label_create(screen);
 	lv_obj_align(labelVelMed, LV_ALIGN_TOP_RIGHT, -20 , 12);
 	lv_obj_align_to(labelVelMedText, labelVelMed, LV_ALIGN_OUT_BOTTOM_MID, -40, 27);
-	lv_obj_set_style_text_font(labelVelMed, &dseg40, LV_STATE_DEFAULT);
+	lv_obj_set_style_text_font(labelVelMed, &dseg30, LV_STATE_DEFAULT);
 	lv_obj_set_style_text_color(labelVelMed, lv_color_black(), LV_STATE_DEFAULT);
 	lv_label_set_text_fmt(labelVelMed, "%2.1f", 0.0);
 	lv_label_set_text(labelVelMedText, "AVG km/h");
@@ -459,14 +432,11 @@ static void task_lcd(void *pvParameters) {
 			lv_scr_load(scr2);
 		}
 			
-		if (return_clicked) {
-			return_clicked = 0;
+		if (xSemaphoreTake(xSemaphoreReturn, 100)) {
 			lv_scr_load(scr1);
 		}
 		
-		if (cancel_clicked || confirm_clicked){
-			cancel_clicked = 0;
-			confirm_clicked= 0;
+		if ((xSemaphoreTake(xSemaphoreConfirm, 100)) || (xSemaphoreTake(xSemaphoreCancel, 100))){
 			lv_scr_load(scr1);
 		}
 	}
@@ -535,27 +505,39 @@ static void task_RTC(void *pvParameters) {
 
 
 static void task_TC(void *pvParameters) {	
-	int pclicked = 0;
+	volatile int uma_vez = 1;
+	
 	for (;;) {
-		//rtc_get_time(RTC, &current_hour,&current_min, &current_sec);
-		if (play_clicked && uma_vez){
-			pclicked =!pclicked;
-
-			TC_init(TC0, ID_TC1, 1, 1);
-			tc_start(TC0, 1);
-			uma_vez = 0;
-			
+		
+		if (xSemaphoreTake(xSemaphorePlay, 100)){
+			//printf("ENTREI");
+			if (uma_vez) {
+				TC_init(TC0, ID_TC1, 1, 1);
+				tc_start(TC0, 1);
+				
+				lv_obj_t * ready_logo = lv_img_create(scr1);
+				lv_img_set_src(ready_logo, &ready_img);
+				lv_obj_align(ready_logo, LV_ALIGN_BOTTOM_RIGHT, 70, 15);
+				
+				lv_obj_t * stop_logo = lv_img_create(scr1);
+				lv_obj_add_event_cb(stop_logo, stop_handler, LV_EVENT_ALL, NULL);
+				lv_obj_align(stop_logo, LV_ALIGN_BOTTOM_LEFT, 15, 60);
+				lv_imgbtn_set_src(stop_logo, LV_IMGBTN_STATE_RELEASED, &stopbtn, NULL, NULL);
+				
+				uma_vez = 0;
+			}
 		} 
 		
-		if (replay_clicked){
+		if (xSemaphoreTake(xSemaphoreStop, 100)) {
+			tc_stop(TC0, 1);
+			uma_vez = 1;
+		}
+		
+		if (xSemaphoreTake(xSemaphoreReplay,100)){
 			tc_stop(TC0, 1);
 			alarm_sec = 0;
 			alarm_min = 0;
 			alarm_h = 0;
-			//TC_init(TC0, ID_TC1, 1, 1);
-			//tc_start(TC0, 1);
-			replay_clicked = 0;
-			play_clicked = 0;
 			uma_vez = 1;
 		}
 
@@ -642,6 +624,24 @@ static void task_calculos(void *pvParameters) {
 			printf("Distância [km]: %2.1f \n", dist);
 			printf("Aceleração [m/s^2]: %2.1f \n", acel);
 			
+			if( acel > 0.5) {
+				lv_obj_t * acel_logo = lv_img_create(scr1);
+				lv_img_set_src(acel_logo, &acel_img);
+				lv_obj_align(acel_logo, LV_ALIGN_TOP_RIGHT, -100, 15);
+			}
+			
+			else if (acel < -0.2) {
+				lv_obj_t * desacel_logo = lv_img_create(scr1);
+				lv_img_set_src(desacel_logo, &desacel_img);
+				lv_obj_align(desacel_logo, LV_ALIGN_TOP_RIGHT, -100, 15);
+			}
+			
+			else if (acel == 0) {
+				lv_obj_t * stable_acel_logo = lv_img_create(scr1);
+				lv_img_set_src(stable_acel_logo, &stable_img);
+				lv_obj_align(stable_acel_logo, LV_ALIGN_TOP_RIGHT, -100, 15);
+			}
+			
 		} else {
 			lv_label_set_text_fmt(labelVelInst, "%2.1f", 0.0);
 			vel_total += 0;
@@ -657,16 +657,8 @@ static void task_calculos(void *pvParameters) {
 
 
 void TC1_Handler(void) {
-	/**
-	* Devemos indicar ao TC que a interrupção foi satisfeita.
-	* Isso é realizado pela leitura do status do periférico
-	**/
 	volatile uint32_t status = tc_get_status(TC0, 1);
 	
-	if (!play_clicked) {
-		tc_stop(TC0, 1);
-		uma_vez = 1;
-	}
 
 	/** Muda o estado do LED (pisca) **/
 		
@@ -933,11 +925,11 @@ int main(void) {
 	
 	xSemaphoreRTC = xSemaphoreCreateBinary();
 	if (xSemaphoreRTC == NULL)
-	printf("falha em criar o semaforo \n");	
+		printf("falha em criar o semaforo \n");	
 
 	xSemaphoreTC = xSemaphoreCreateBinary();
 	if (xSemaphoreTC == NULL)
-	printf("falha em criar o semaforo \n");
+		printf("falha em criar o semaforo \n");
 
 	xSemaphoredT = xSemaphoreCreateBinary();
 	if (xSemaphoredT == NULL)
@@ -945,6 +937,10 @@ int main(void) {
 	
 	xSemaphorePlay = xSemaphoreCreateBinary();
 	if (xSemaphorePlay == NULL)
+		printf("falha em criar o semaforo \n");
+		
+	xSemaphoreStop = xSemaphoreCreateBinary();
+	if (xSemaphoreStop == NULL)
 		printf("falha em criar o semaforo \n");
 	
 	xSemaphoreReplay = xSemaphoreCreateBinary();

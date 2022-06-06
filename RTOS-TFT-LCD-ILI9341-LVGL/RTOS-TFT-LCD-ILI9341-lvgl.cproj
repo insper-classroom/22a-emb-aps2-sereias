@@ -905,6 +905,9 @@
     <Compile Include="src\dseg50.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\imgs\acel_img.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\imgs\cancelbtn.h">
       <SubType>compile</SubType>
     </Compile>
@@ -912,6 +915,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\imgs\cronometro.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\desacel_img.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\imgs\distimg.h">
@@ -923,10 +929,19 @@
     <Compile Include="src\imgs\playbtn.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\imgs\ready_img.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\imgs\replaybtn.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\imgs\returnbtn.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\stable_img.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\stopbtn.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\imgs\velintimg.h">
