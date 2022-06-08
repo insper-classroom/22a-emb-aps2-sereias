@@ -184,7 +184,7 @@ static void play_handler(lv_event_t * e) {
 	if(code == LV_EVENT_CLICKED) {
 		LV_LOG_USER("Clicked");
 		BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-		xSemaphoreGiveFromISR(xSemaphorePlay, xHigherPriorityTaskWoken);
+		xSemaphoreGive(xSemaphorePlay);
 	}
 }
 
@@ -194,7 +194,7 @@ static void stop_handler(lv_event_t * e) {
 	if(code == LV_EVENT_CLICKED) {
 		LV_LOG_USER("Clicked");
 		BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-		xSemaphoreGiveFromISR(xSemaphoreStop, xHigherPriorityTaskWoken);
+		xSemaphoreGive(xSemaphoreStop);
 	}
 }
 
@@ -204,7 +204,7 @@ static void replay_handler(lv_event_t * e) {
 	if(code == LV_EVENT_CLICKED) {
 		LV_LOG_USER("Clicked");
 		BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-		xSemaphoreGiveFromISR(xSemaphoreReplay, xHigherPriorityTaskWoken);
+		xSemaphoreGive(xSemaphoreReplay);
 	}
 }
 
@@ -277,6 +277,8 @@ void create_scr(lv_obj_t * screen) {
 	lv_obj_t * company_logo = lv_img_create(screen);
 	lv_obj_t * dist_img = lv_img_create(screen);
 	lv_obj_t * velinst_img = lv_img_create(screen);
+	ready_logo= lv_img_create(screen);
+
 	
 	// -------------------- PLAY BUTTON --------------------
 	
@@ -304,6 +306,12 @@ void create_scr(lv_obj_t * screen) {
 	
 	lv_img_set_src(cronometro_img, &cronometro);
 	lv_obj_align(cronometro_img, LV_ALIGN_LEFT_MID, 15, 0);
+	
+	// ------------------------- READY LOGO ---------------
+	
+	lv_obj_align(ready_logo, LV_ALIGN_BOTTOM_RIGHT, -40, 15);
+	lv_img_set_src(ready_logo, &ready_logo);
+
 	
 	// -------------------- CRONOMETRO LABEL --------------------
 	
@@ -537,9 +545,7 @@ static void task_TC(void *pvParameters) {
 				lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &playbtn, NULL, NULL);
 				TC_init(TC0, ID_TC1, 1, 1);
 				tc_start(TC0, 1);		
-				ready_logo= lv_img_create(scr1);
-				lv_img_set_src(ready_logo, &ready_img);
-				lv_obj_align(ready_logo, LV_ALIGN_BOTTOM_RIGHT, 70, 15);
+
 			} else {
 				tc_stop(TC0, 1);
 				lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &stopbtn, NULL, NULL);
@@ -580,7 +586,7 @@ static void task_calculos(void *pvParameters) {
 	TC_init(TC1, ID_TC4, 1, 1);
 	tc_start(TC1, 1);
 	
-
+	double acel;
 	int counter = 0;
 	double dist = 0;
 	double tempo_antigo_s = 0;
@@ -597,6 +603,7 @@ static void task_calculos(void *pvParameters) {
 
 	for(;;){
 		if (xSemaphoreTake(xSemaphoredT, 5000)){
+			
 			pulsos = rtt_read_timer_value(RTT);
 			double tempo_s = pulsos/100.0;
 			
@@ -611,9 +618,9 @@ static void task_calculos(void *pvParameters) {
 			dist += (2*PI*RAIO*dt)/1000.0; //era em metros, coloquei pra km
 			lv_label_set_text_fmt(labelDist, "%.1f", dist);
 			
+			acel = (v_metros - vel_anterior)/(double)dt ;// aceleração em metros/s^2
+			//acel = 0;
 
-			double acel = (v_metros - vel_anterior)/(double)dt ;// aceleração em metros/s^2
-			
 			
 			vel_anterior = v_metros;
 			
@@ -642,31 +649,36 @@ static void task_calculos(void *pvParameters) {
 				lv_obj_t * acel_logo = lv_img_create(scr1);
 				lv_img_set_src(acel_logo, &acel_img);
 				lv_obj_align(acel_logo, LV_ALIGN_TOP_RIGHT, -100, 15);
-				pio_clear(GREEN_PIO, GREEN_IDX_MASK);
-				pio_set(BLUE_PIO, BLUE_IDX_MASK);
-				pio_set(RED_PIO, RED_IDX_MASK);
+				pio_set(GREEN_PIO, GREEN_IDX_MASK);
+				pio_clear(BLUE_PIO, BLUE_IDX_MASK);
+				pio_clear(RED_PIO, RED_IDX_MASK);
 			}
 			
 			else if (acel < 0) {
 				lv_obj_t * desacel_logo = lv_img_create(scr1);
 				lv_img_set_src(desacel_logo, &desacel_img);
 				lv_obj_align(desacel_logo, LV_ALIGN_TOP_RIGHT, -100, 15);
-				pio_clear(RED_PIO, RED_IDX_MASK);
-				pio_set(BLUE_PIO, BLUE_IDX_MASK);
-				pio_set(GREEN_PIO, GREEN_IDX_MASK);
+				pio_set(RED_PIO, RED_IDX_MASK);
+				pio_clear(BLUE_PIO, BLUE_IDX_MASK);
+				pio_clear(GREEN_PIO, GREEN_IDX_MASK);
 			}
 			
 			else if (acel == 0) {
 				lv_obj_t * stable_acel_logo = lv_img_create(scr1);
 				lv_img_set_src(stable_acel_logo, &stable_img);
 				lv_obj_align(stable_acel_logo, LV_ALIGN_TOP_RIGHT, -100, 15);
-				pio_clear(BLUE_PIO, BLUE_IDX_MASK);
-				pio_set(RED_PIO, RED_IDX_MASK);
-				pio_set(GREEN_PIO, GREEN_IDX_MASK);
+				pio_set(BLUE_PIO, BLUE_IDX_MASK);
+				pio_clear(RED_PIO, RED_IDX_MASK);
+				pio_clear(GREEN_PIO, GREEN_IDX_MASK);
 			}
 			
 		} else {
 			lv_label_set_text_fmt(labelVelInst, "%2.1f", 0.0);
+			pio_clear(BLUE_PIO, BLUE_IDX_MASK);
+			pio_clear(RED_PIO, RED_IDX_MASK);
+			pio_clear(GREEN_PIO, GREEN_IDX_MASK);
+			acel = 0;
+			
 			vel_total += 0;
 			counter +=1;
 		}
@@ -838,9 +850,9 @@ void init(void) {
 	pmc_enable_periph_clk(RED_PIO_ID);
 	pmc_enable_periph_clk(GREEN_PIO_ID);
 	
-	pio_set_output(BLUE_PIO, BLUE_IDX_MASK, 1, 0, 0);
-	pio_set_output(RED_PIO, RED_IDX_MASK, 1, 0, 0);
-	pio_set_output(GREEN_PIO, GREEN_IDX_MASK, 1, 0, 0);		
+	pio_set_output(BLUE_PIO, BLUE_IDX_MASK, 0, 0, 0);
+	pio_set_output(RED_PIO, RED_IDX_MASK, 0, 0, 0);
+	pio_set_output(GREEN_PIO, GREEN_IDX_MASK, 0, 0, 0);		
 		
 	pio_handler_set(BUT_PIO,
 	BUT_PIO_ID,
