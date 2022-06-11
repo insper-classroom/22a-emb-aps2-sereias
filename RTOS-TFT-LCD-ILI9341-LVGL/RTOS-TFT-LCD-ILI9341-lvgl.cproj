@@ -926,6 +926,9 @@
     <Compile Include="src\imgs\logoimg.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\imgs\not_ready_img.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\imgs\playbtn.h">
       <SubType>compile</SubType>
     </Compile>

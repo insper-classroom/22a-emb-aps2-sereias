@@ -24,6 +24,8 @@
 #include "imgs/stable_img.h"
 #include "imgs/ready_img.h"
 #include "imgs/stopbtn.h"
+#include "imgs/not_ready_img.h"
+
 
 /************************************************************************/
 /* DEFINES PINOS                                                        */
@@ -309,8 +311,8 @@ void create_scr(lv_obj_t * screen) {
 	
 	// ------------------------- READY LOGO ---------------
 	
-	lv_obj_align(ready_logo, LV_ALIGN_BOTTOM_RIGHT, -40, 15);
-	lv_img_set_src(ready_logo, &ready_logo);
+	lv_obj_align(ready_logo, LV_ALIGN_BOTTOM_RIGHT, -190, -20);
+	lv_img_set_src(ready_logo, &not_ready_img);
 
 	
 	// -------------------- CRONOMETRO LABEL --------------------
@@ -543,19 +545,33 @@ static void task_TC(void *pvParameters) {
 			play_ativado =! play_ativado;
 			if (play_ativado){
 				lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &playbtn, NULL, NULL);
+				//lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &stopbtn, NULL, NULL);
+
+				lv_img_set_src(ready_logo, &ready_img);
+
 				TC_init(TC0, ID_TC1, 1, 1);
 				tc_start(TC0, 1);		
 
 			} else {
 				tc_stop(TC0, 1);
+				//lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &playbtn, NULL, NULL);
+
 				lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &stopbtn, NULL, NULL);
+				lv_img_set_src(ready_logo, &not_ready_img);
+
 			}
 		}
 
 		
 		if (xSemaphoreTake(xSemaphoreReplay,0)){
 			tc_stop(TC0, 1);
-			lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &playbtn, NULL, NULL);
+			if (play_ativado){
+				lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &playbtn, NULL, NULL);
+				lv_img_set_src(ready_logo, &not_ready_img);
+			} else {
+				//lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &stopbtn, NULL, NULL);
+				lv_img_set_src(ready_logo, &ready_img);
+			}
 			alarm_sec = 0;
 			alarm_min = 0;
 			alarm_h = 0;
