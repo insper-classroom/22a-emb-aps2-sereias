@@ -44,11 +44,11 @@ src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/lv_animimg.d \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/hal/lv_hal_disp.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/hal/lv_hal.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/hal/../draw/lv_img_buf.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_color.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_math.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_types.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_area.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/hal/../draw/../misc/lv_color.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/hal/../draw/../misc/../lv_conf_internal.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/hal/../draw/../misc/lv_math.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/hal/../draw/../misc/lv_types.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/hal/../draw/../misc/lv_area.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/hal/../misc/lv_color.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/hal/../misc/lv_area.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/hal/../misc/lv_ll.h \
@@ -59,15 +59,15 @@ src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/lv_animimg.d \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/lv_obj.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../lv_conf_internal.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../misc/lv_style.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\font\lv_font.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\font\lv_symbol_def.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_area.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../misc/../font/lv_font.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../misc/../font/../lv_conf_internal.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../misc/../font/lv_symbol_def.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../misc/../font/../misc/lv_area.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../misc/lv_color.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../misc/lv_area.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../misc/lv_anim.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../misc/lv_txt.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../misc/../lv_conf_internal.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\lib\gcc\arm-none-eabi\6.3.1\include\stdarg.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../misc/lv_printf.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\inttypes.h \
@@ -89,23 +89,24 @@ src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/lv_animimg.d \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/lv_obj_style_gen.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/lv_obj_draw.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/lv_draw.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_style.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_txt.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../lv_conf_internal.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../misc/lv_style.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../misc/lv_txt.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/lv_img_decoder.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/lv_img_buf.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_fs.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_types.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_area.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../misc/lv_fs.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../misc/../lv_conf_internal.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../misc/lv_types.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../misc/lv_area.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/lv_img_cache.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/lv_draw_rect.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/lv_draw_blend.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_color.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../misc/lv_color.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/lv_draw_mask.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_math.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\font\lv_font.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../misc/lv_math.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../font/lv_font.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/lv_draw_label.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_bidi.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../misc/lv_bidi.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/lv_draw_img.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/lv_draw_line.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/lv_draw_triangle.h \
@@ -129,33 +130,33 @@ src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/lv_animimg.d \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/font/lv_font.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/misc/lv_printf.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_arc.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../lv_conf_internal.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../core/lv_obj.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_btn.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_img.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_fs.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\draw\lv_draw.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../misc/lv_fs.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../draw/lv_draw.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_label.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\font\lv_font.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\font\lv_symbol_def.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_txt.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../font/lv_font.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../font/lv_symbol_def.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../misc/lv_txt.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_line.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_table.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_label.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_checkbox.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_bar.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_anim.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../misc/lv_anim.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_btn.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_slider.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_bar.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_btnmatrix.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_dropdown.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\widgets\lv_label.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../widgets/lv_label.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_roller.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_textarea.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_canvas.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\widgets\lv_img.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\draw\lv_draw_img.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../widgets/lv_img.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../draw/lv_draw_img.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_switch.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/draw/lv_draw.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/lv_api_map.h \
@@ -164,65 +165,65 @@ src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/lv_animimg.d \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/lv_widgets.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/animimg/lv_animimg.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/calendar/lv_calendar.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\widgets\lv_btnmatrix.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/calendar/../../../widgets/lv_btnmatrix.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/calendar/lv_calendar_header_arrow.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/calendar/../../../core/lv_obj.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/calendar/lv_calendar_header_dropdown.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/chart/lv_chart.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/chart/../../../lvgl.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/keyboard/lv_keyboard.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\widgets\lv_btnmatrix.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/keyboard/../../../widgets/lv_btnmatrix.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/list/lv_list.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\extra\layouts\flex\lv_flex.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/list/../../../core/lv_obj.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/list/../../layouts/flex/lv_flex.h \
+ c:\users\henrique\ martinelli\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/msgbox/lv_msgbox.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/msgbox/../../../lvgl.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/meter/lv_meter.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/meter/../../../lvgl.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/spinbox/lv_spinbox.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/spinbox/../../../lvgl.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/spinner/lv_spinner.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/spinner/../../../lvgl.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/tabview/lv_tabview.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/tabview/../../../lvgl.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/tileview/lv_tileview.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/tileview/../../../core/lv_obj.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/win/lv_win.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/win/../../../lvgl.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/colorwheel/lv_colorwheel.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/colorwheel/../../../lvgl.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/led/lv_led.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/led/../../../lvgl.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/imgbtn/lv_imgbtn.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/imgbtn/../../../lvgl.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/span/lv_span.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/span/../../../lvgl.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/layouts/lv_layouts.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/layouts/flex/lv_flex.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/layouts/grid/lv_grid.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/layouts/grid/../../../core/lv_obj.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/themes/lv_themes.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/themes/default/lv_theme_default.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/themes/default/../../../core/lv_obj.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/themes/mono/lv_theme_mono.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/themes/mono/../../../core/lv_obj.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/themes/basic/lv_theme_basic.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/themes/basic/../../../core/lv_obj.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/others/lv_others.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/others/snapshot/lv_snapshot.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/others/snapshot/../../../lv_conf_internal.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/others/snapshot/../../../core/lv_obj.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/lv_libs.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/bmp/lv_bmp.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/bmp/../../../lv_conf_internal.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/fsdrv/lv_fsdrv.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/png/lv_png.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/png/../../../lv_conf_internal.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/gif/lv_gif.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/gif/../../../lvgl.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/qrcode/lv_qrcode.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/qrcode/../../../lvgl.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/sjpg/lv_sjpg.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\stdio.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\types.h \
@@ -237,9 +238,9 @@ src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/lv_animimg.d \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\machine\types.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\stdio.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/freetype/lv_freetype.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/freetype/../../../lvgl.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/rlottie/lv_rlottie.h \
- c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h \
+ ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/rlottie/../../../lvgl.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../misc/lv_assert.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../draw/lv_img_decoder.h \
  ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../misc/lv_fs.h \
@@ -334,15 +335,15 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-no
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/hal/../draw/lv_img_buf.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_color.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/hal/../draw/../misc/lv_color.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/hal/../draw/../misc/../lv_conf_internal.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_math.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/hal/../draw/../misc/lv_math.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_types.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/hal/../draw/../misc/lv_types.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_area.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/hal/../draw/../misc/lv_area.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/hal/../misc/lv_color.h:
 
@@ -364,13 +365,13 @@ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\m
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../misc/lv_style.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\font\lv_font.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../misc/../font/lv_font.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../misc/../font/../lv_conf_internal.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\font\lv_symbol_def.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../misc/../font/lv_symbol_def.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_area.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../misc/../font/../misc/lv_area.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../misc/lv_color.h:
 
@@ -380,7 +381,7 @@ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\m
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../misc/lv_txt.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../misc/../lv_conf_internal.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\lib\gcc\arm-none-eabi\6.3.1\include\stdarg.h:
 
@@ -424,21 +425,23 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-no
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/lv_draw.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../lv_conf_internal.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_style.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../misc/lv_style.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_txt.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../misc/lv_txt.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/lv_img_decoder.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/lv_img_buf.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_fs.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../misc/lv_fs.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_types.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../misc/../lv_conf_internal.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_area.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../misc/lv_types.h:
+
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../misc/lv_area.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/lv_img_cache.h:
 
@@ -446,17 +449,17 @@ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\m
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/lv_draw_blend.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_color.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../misc/lv_color.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/lv_draw_mask.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_math.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../misc/lv_math.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\font\lv_font.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../font/lv_font.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/lv_draw_label.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_bidi.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/../misc/lv_bidi.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/core/../draw/lv_draw_img.h:
 
@@ -504,25 +507,25 @@ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\m
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_arc.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../lv_conf_internal.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../core/lv_obj.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_btn.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_img.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_fs.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../misc/lv_fs.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\draw\lv_draw.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../draw/lv_draw.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_label.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\font\lv_font.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../font/lv_font.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\font\lv_symbol_def.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../font/lv_symbol_def.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_txt.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../misc/lv_txt.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_line.h:
 
@@ -534,7 +537,7 @@ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\m
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_bar.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\misc\lv_anim.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../misc/lv_anim.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_btn.h:
 
@@ -546,7 +549,7 @@ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\m
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_dropdown.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\widgets\lv_label.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../widgets/lv_label.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_roller.h:
 
@@ -554,9 +557,9 @@ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\w
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_canvas.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\widgets\lv_img.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../widgets/lv_img.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\draw\lv_draw_img.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/../draw/lv_draw_img.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/widgets/lv_switch.h:
 
@@ -574,73 +577,73 @@ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\d
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/calendar/lv_calendar.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\widgets\lv_btnmatrix.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/calendar/../../../widgets/lv_btnmatrix.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/calendar/lv_calendar_header_arrow.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/calendar/../../../core/lv_obj.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/calendar/lv_calendar_header_dropdown.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/chart/lv_chart.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/chart/../../../lvgl.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/keyboard/lv_keyboard.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\widgets\lv_btnmatrix.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/keyboard/../../../widgets/lv_btnmatrix.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/list/lv_list.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/list/../../../core/lv_obj.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\extra\layouts\flex\lv_flex.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/list/../../layouts/flex/lv_flex.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h:
+c:\users\henrique\ martinelli\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/msgbox/lv_msgbox.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/msgbox/../../../lvgl.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/meter/lv_meter.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/meter/../../../lvgl.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/spinbox/lv_spinbox.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/spinbox/../../../lvgl.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/spinner/lv_spinner.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/spinner/../../../lvgl.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/tabview/lv_tabview.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/tabview/../../../lvgl.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/tileview/lv_tileview.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/tileview/../../../core/lv_obj.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/win/lv_win.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/win/../../../lvgl.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/colorwheel/lv_colorwheel.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/colorwheel/../../../lvgl.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/led/lv_led.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/led/../../../lvgl.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/imgbtn/lv_imgbtn.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/imgbtn/../../../lvgl.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/span/lv_span.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/widgets/span/../../../lvgl.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/layouts/lv_layouts.h:
 
@@ -648,49 +651,49 @@ c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\l
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/layouts/grid/lv_grid.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/layouts/grid/../../../core/lv_obj.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/themes/lv_themes.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/themes/default/lv_theme_default.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/themes/default/../../../core/lv_obj.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/themes/mono/lv_theme_mono.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/themes/mono/../../../core/lv_obj.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/themes/basic/lv_theme_basic.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/themes/basic/../../../core/lv_obj.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/others/lv_others.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/others/snapshot/lv_snapshot.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/others/snapshot/../../../lv_conf_internal.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\core\lv_obj.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/others/snapshot/../../../core/lv_obj.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/lv_libs.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/bmp/lv_bmp.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/bmp/../../../lv_conf_internal.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/fsdrv/lv_fsdrv.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/png/lv_png.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lv_conf_internal.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/png/../../../lv_conf_internal.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/gif/lv_gif.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/gif/../../../lvgl.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/qrcode/lv_qrcode.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/qrcode/../../../lvgl.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/sjpg/lv_sjpg.h:
 
@@ -720,11 +723,11 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-no
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/freetype/lv_freetype.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/freetype/../../../lvgl.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/rlottie/lv_rlottie.h:
 
-c:\22a-emb-aps2-sereias\rtos-tft-lcd-ili9341-lvgl\src\asf\thirdparty\lvgl8\src\lvgl.h:
+../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../../src/extra/libs/rlottie/../../../lvgl.h:
 
 ../src/ASF/thirdparty/lvgl8/src/extra/widgets/animimg/../../../misc/lv_assert.h:
 

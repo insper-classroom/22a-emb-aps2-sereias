@@ -21,7 +21,7 @@
 #include "imgs/velintimg.h"
 #include "imgs/acel_img.h"
 #include "imgs/desacel_img.h"
-#include "imgs/stable_img.h"
+#include "imgs/blueimg.h"
 #include "imgs/ready_img.h"
 #include "imgs/stopbtn.h"
 #include "imgs/not_ready_img.h"
@@ -534,44 +534,35 @@ static void task_RTC(void *pvParameters) {
 
 
 static void task_TC(void *pvParameters) {	
-	int play_ativado = 0;
+	int play_ativado = 1;
 	
 	static lv_style_t style;
 	lv_style_init(&style);
 	
 	for (;;) {
 		
-		if (xSemaphoreTake(xSemaphorePlay, 10)){
-			play_ativado =! play_ativado;
+		if (xSemaphoreTake(xSemaphorePlay, 0)){
 			if (play_ativado){
+				play_ativado = 0;
 				lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &playbtn, NULL, NULL);
-				//lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &stopbtn, NULL, NULL);
-
 				lv_img_set_src(ready_logo, &ready_img);
 
 				TC_init(TC0, ID_TC1, 1, 1);
-				tc_start(TC0, 1);		
+				tc_start(TC0, 1);
 
-			} else {
+				} else {
+				play_ativado = 1;
 				tc_stop(TC0, 1);
-				//lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &playbtn, NULL, NULL);
-
 				lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &stopbtn, NULL, NULL);
 				lv_img_set_src(ready_logo, &not_ready_img);
-
 			}
 		}
 
 		
 		if (xSemaphoreTake(xSemaphoreReplay,0)){
 			tc_stop(TC0, 1);
-			if (play_ativado){
-				lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &playbtn, NULL, NULL);
-				lv_img_set_src(ready_logo, &not_ready_img);
-			} else {
-				//lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &stopbtn, NULL, NULL);
-				lv_img_set_src(ready_logo, &ready_img);
-			}
+			lv_imgbtn_set_src(play_logo, LV_IMGBTN_STATE_RELEASED, &stopbtn, NULL, NULL);
+			lv_img_set_src(ready_logo, &ready_img);
 			alarm_sec = 0;
 			alarm_min = 0;
 			alarm_h = 0;
@@ -681,7 +672,7 @@ static void task_calculos(void *pvParameters) {
 			
 			else if (acel == 0) {
 				lv_obj_t * stable_acel_logo = lv_img_create(scr1);
-				lv_img_set_src(stable_acel_logo, &stable_img);
+				lv_img_set_src(stable_acel_logo, &blueimg);
 				lv_obj_align(stable_acel_logo, LV_ALIGN_TOP_RIGHT, -100, 15);
 				pio_set(BLUE_PIO, BLUE_IDX_MASK);
 				pio_clear(RED_PIO, RED_IDX_MASK);

@@ -908,6 +908,9 @@
     <Compile Include="src\imgs\acel_img.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\imgs\blueimg.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\imgs\cancelbtn.h">
       <SubType>compile</SubType>
     </Compile>
@@ -939,9 +942,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\imgs\returnbtn.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\imgs\stable_img.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\imgs\stopbtn.h">
