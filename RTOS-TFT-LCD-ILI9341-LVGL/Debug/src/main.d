@@ -420,8 +420,8 @@ src/main.d src/main.o: ../src/main.c ../src/asf.h \
  ../src/imgs/wheelbtn.h ../src/imgs/cancelbtn.h ../src/imgs/confirmbtn.h \
  ../src/imgs/returnbtn.h ../src/imgs/cronometro.h ../src/imgs/wheelimg.h \
  ../src/imgs/logoimg.h ../src/imgs/distimg.h ../src/imgs/velintimg.h \
- ../src/imgs/acel_img.h ../src/imgs/desacel_img.h \
- ../src/imgs/stable_img.h ../src/imgs/ready_img.h ../src/imgs/stopbtn.h \
+ ../src/imgs/acel_img.h ../src/imgs/desacel_img.h ../src/imgs/blueimg.h \
+ ../src/imgs/ready_img.h ../src/imgs/stopbtn.h \
  ../src/imgs/not_ready_img.h
 
 ../src/asf.h:
@@ -1308,7 +1308,7 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-no
 
 ../src/imgs/desacel_img.h:
 
-../src/imgs/stable_img.h:
+../src/imgs/blueimg.h:
 
 ../src/imgs/ready_img.h:
 
