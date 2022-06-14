@@ -652,7 +652,7 @@ static void task_calculos(void *pvParameters) {
 			printf("Distância [km]: %2.1f \n", dist);
 			printf("Aceleração [m/s^2]: %2.1f \n", acel);
 			
-			if( acel >= 0.1) {
+			if( acel > 0) {
 				lv_obj_t * acel_logo = lv_img_create(scr1);
 				lv_img_set_src(acel_logo, &acel_img);
 				lv_obj_align(acel_logo, LV_ALIGN_TOP_RIGHT, -100, 15);
@@ -861,34 +861,34 @@ void init(void) {
 	pio_set_output(RED_PIO, RED_IDX_MASK, 0, 0, 0);
 	pio_set_output(GREEN_PIO, GREEN_IDX_MASK, 0, 0, 0);		
 		
-	pio_handler_set(BUT_PIO,
-	BUT_PIO_ID,
-	BUT_PIO_IDX_MASK,
-	PIO_IT_FALL_EDGE,
-	SIMULADOR_callback);
-		
-	pio_enable_interrupt(BUT_PIO, BUT_PIO_IDX_MASK);
-	pio_get_interrupt_status(BUT_PIO);
-
-		
-	NVIC_EnableIRQ(BUT_PIO_ID);
-	NVIC_SetPriority(BUT_PIO_ID, 4); // Prioridade 4
-	
-	
-	//pmc_enable_periph_clk(SIMULADOR_PIO_ID);
-	//pio_set_input(SIMULADOR_PIO,SIMULADOR_IDX_MASK,PIO_DEFAULT);
-	
-	//pio_handler_set(SIMULADOR_PIO,
-	//SIMULADOR_PIO_ID,
-	//SIMULADOR_IDX_MASK,
+	//pio_handler_set(BUT_PIO,
+	//BUT_PIO_ID,
+	//BUT_PIO_IDX_MASK,
 	//PIO_IT_FALL_EDGE,
 	//SIMULADOR_callback);
-	//
-	//pio_enable_interrupt(SIMULADOR_PIO, SIMULADOR_IDX_MASK);
-	//pio_get_interrupt_status(SIMULADOR_PIO);
-	//
-	//NVIC_EnableIRQ(SIMULADOR_PIO_ID);
-	//NVIC_SetPriority(SIMULADOR_PIO_ID, 4); // Prioridade 4
+		//
+	//pio_enable_interrupt(BUT_PIO, BUT_PIO_IDX_MASK);
+	//pio_get_interrupt_status(BUT_PIO);
+//
+		//
+	//NVIC_EnableIRQ(BUT_PIO_ID);
+	//NVIC_SetPriority(BUT_PIO_ID, 4); // Prioridade 4
+	
+	
+	pmc_enable_periph_clk(SIMULADOR_PIO_ID);
+	pio_set_input(SIMULADOR_PIO,SIMULADOR_IDX_MASK,PIO_DEFAULT);
+	
+	pio_handler_set(SIMULADOR_PIO,
+	SIMULADOR_PIO_ID,
+	SIMULADOR_IDX_MASK,
+	PIO_IT_FALL_EDGE,
+	SIMULADOR_callback);
+	
+	pio_enable_interrupt(SIMULADOR_PIO, SIMULADOR_IDX_MASK);
+	pio_get_interrupt_status(SIMULADOR_PIO);
+	
+	NVIC_EnableIRQ(SIMULADOR_PIO_ID);
+	NVIC_SetPriority(SIMULADOR_PIO_ID, 4); // Prioridade 4
 }
 
 
