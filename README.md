@@ -90,3 +90,10 @@ Nome da marca:
 ![WhatsApp Image 2022-05-15 at 15 54 59 (1)](https://user-images.githubusercontent.com/62613979/168489414-2d3a4b9f-4fb8-476a-a37e-b6a6797836ee.jpeg)
 
 ### Vídeo: https://youtu.be/tQ5ABZWDSG4
+
+
+## Vídeos de validação e testes com fita RGB 📹:
+
+- Vídeo pré-validação com fita LED RGB funcionando parte 1: https://www.youtube.com/watch?v=QeDmZ5AdRtw
+- Vídeo pré-validação com fita LED RGB funcionando parte 2: https://www.youtube.com/watch?v=E4xa4bP-KeQ
+- Vídeo da validação na bicicleta com fita LED RGB e placa LCD: https://www.youtube.com/watch?v=0erbLYefOcY
