@@ -92,8 +92,36 @@ Nome da marca:
 ### Vídeo: https://youtu.be/tQ5ABZWDSG4
 
 
-## Vídeos de validação e testes com fita RGB 📹:
+# Vídeos de validação e testes com fita RGB 📹:
+
+## Entrega final da APS 3
 
 - Vídeo pré-validação com fita LED RGB funcionando parte 1: https://www.youtube.com/watch?v=QeDmZ5AdRtw
 - Vídeo pré-validação com fita LED RGB funcionando parte 2: https://www.youtube.com/watch?v=E4xa4bP-KeQ
 - Vídeo da validação na bicicleta com fita LED RGB e placa LCD: https://www.youtube.com/watch?v=0erbLYefOcY
+
+[![foto_azul](https://user-images.githubusercontent.com/62647438/173940570-488ac62b-9875-4d40-b61a-3a9eaa77ab70.png)](https://www.youtube.com/watch?v=0erbLYefOcY)
+
+## Checagem dos conceitos feitos:
+
+### C
+- [x] A interface a ser projetada deve ser tal que o usuário consigo operar com apenas uma mão (lembre que é algo para ser usado na bike) e que as informações devem ser exibidas de forma clara, considerando uma leitura e operação em movimento.
+- [x] O hardware a ser utilizado será o LCD de 240x320px touch colorido.
+- [x] O logotipo da empresa deve estar presente na interface.
+- [x] Indicação da hora atual, no formato: HH:MM:SS atualizada a cada segundo.
+- [x] Exibir a velocidade em km/h.
+- [x] Indicação visual da aceleração da bicicleta (positiva/ negativa ou constante).
+
+### B
+
+- [x] A interface deve ser alinhada com o logo e nome da empresa que você escolheu (blanding)
+- [x] Indicação em km da distância percorrida no trajeto.
+- [x] Indicação em km/h da velocidade média no trajeto.
+- [x] Indicação em HH:MM do tempo gasto em um trajeto.
+- [x] Deve possibilitar o usuário iniciar, parar ou reiniciar a contagem de um trajeto.
+- [x] A tela deve possuir um indicador se a contagem da parte referente ao percurso está ou não ativada.
+- [x] Adicionar alguma coisa diferente na bicicleta, aqui você deve deixar a imaginação voar!!
+
+### A
+
+- [x] Deve possibilitar o usuário configurar o diâmetro da roda.
