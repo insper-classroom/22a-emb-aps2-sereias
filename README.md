@@ -94,7 +94,7 @@ Nome da marca:
 
 # Vídeos de validação e testes com fita RGB 📹:
 
-## Entrega final da APS 3
+## Entrega final da APS 2
 
 - Vídeo pré-validação com fita LED RGB funcionando parte 1: https://www.youtube.com/watch?v=QeDmZ5AdRtw
 - Vídeo pré-validação com fita LED RGB funcionando parte 2: https://www.youtube.com/watch?v=E4xa4bP-KeQ
