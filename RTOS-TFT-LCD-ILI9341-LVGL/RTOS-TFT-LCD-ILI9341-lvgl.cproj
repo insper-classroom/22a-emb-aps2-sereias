@@ -37,12 +37,15 @@
           <option id="common.services.ioport" value="Add" config="" content-id="Atmel.ASF" />
           <option id="common.services.basic.serial" value="Add" config="" content-id="Atmel.ASF" />
           <option id="common.services.basic.spi_master" value="Add" config="standard_spi" content-id="Atmel.ASF" />
+          <option id="common.services.basic.twihs" value="Add" config="" content-id="Atmel.ASF" />
           <option id="common.utils.stdio.stdio_serial" value="Add" config="" content-id="Atmel.ASF" />
           <option id="sam.drivers.afec" value="Add" config="" content-id="Atmel.ASF" />
           <option id="sam.drivers.mpu" value="Add" config="" content-id="Atmel.ASF" />
           <option id="sam.drivers.pio" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="sam.drivers.rtc" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="sam.drivers.rtt" value="Add" config="" content-id="Atmel.ASF" />
           <option id="thirdparty.os.freertos.version" value="Add" config="8.2.3" content-id="Atmel.ASF" />
-          <option id="common.services.basic.twihs" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="sam.drivers.tc" value="Add" config="" content-id="Atmel.ASF" />
           <option id="common.components.touch.mxt.example_usart" value="Add" config="" content-id="Atmel.ASF" />
           <option id="sam.utils.cmsis.same70.source.template" value="Add" config="" content-id="Atmel.ASF" />
         </options>
@@ -312,6 +315,12 @@
           <file path="src/ASF/thirdparty/freertos/freertos-8.2.3/Source/timers.c" framework="" version="3.42.0" source="thirdparty\freertos\freertos-8.2.3\Source\timers.c" changed="False" content-id="Atmel.ASF" />
           <file path="src/ASF/thirdparty/freertos/freertos-8.2.3/Source/queue.c" framework="" version="3.42.0" source="thirdparty\freertos\freertos-8.2.3\Source\queue.c" changed="False" content-id="Atmel.ASF" />
           <file path="src/ASF/thirdparty/freertos/freertos-8.2.3/Source/event_groups.c" framework="" version="3.42.0" source="thirdparty\freertos\freertos-8.2.3\Source\event_groups.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/sam/drivers/rtc/rtc.h" framework="" version="3.42.0" source="sam\drivers\rtc\rtc.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/sam/drivers/rtc/rtc.c" framework="" version="3.42.0" source="sam\drivers\rtc\rtc.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/sam/drivers/rtt/rtt.c" framework="" version="3.42.0" source="sam\drivers\rtt\rtt.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/sam/drivers/rtt/rtt.h" framework="" version="3.42.0" source="sam\drivers\rtt\rtt.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/sam/drivers/tc/tc.c" framework="" version="3.42.0" source="sam\drivers\tc\tc.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/sam/drivers/tc/tc.h" framework="" version="3.42.0" source="sam\drivers\tc\tc.h" changed="False" content-id="Atmel.ASF" />
         </files>
         <documentation help="http://asf.atmel.com/docs/3.40.0/common.components.touch.mxt.example_usart.same70_xplained/html/index.html" />
         <offline-documentation help="" />
@@ -323,7 +332,7 @@
       </framework-data>
     </AsfFrameworkConfig>
     <avrtool>com.atmel.avrdbg.tool.edbg</avrtool>
-    <avrtoolserialnumber>ATML2637010000000000</avrtoolserialnumber>
+    <avrtoolserialnumber>ATML2637010000000001</avrtoolserialnumber>
     <avrdeviceexpectedsignature>0xA1020E01</avrdeviceexpectedsignature>
     <avrtoolinterface>SWD</avrtoolinterface>
     <com_atmel_avrdbg_tool_edbg>
@@ -334,7 +343,7 @@
         <InterfaceName>SWD</InterfaceName>
       </ToolOptions>
       <ToolType>com.atmel.avrdbg.tool.edbg</ToolType>
-      <ToolNumber>ATML2637010000000000</ToolNumber>
+      <ToolNumber>ATML2637010000000001</ToolNumber>
       <ToolName>EDBG</ToolName>
     </com_atmel_avrdbg_tool_edbg>
     <avrtoolinterfaceclock>2000000</avrtoolinterfaceclock>
@@ -395,6 +404,9 @@
       <Value>../src/ASF/sam/drivers/spi</Value>
       <Value>../src/ASF/sam/drivers/twihs</Value>
       <Value>../src/ASF/common/services/twi</Value>
+      <Value>../src/ASF/sam/drivers/rtc</Value>
+      <Value>../src/ASF/sam/drivers/rtt</Value>
+      <Value>../src/ASF/sam/drivers/tc</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.level>Optimize for size (-Os)</armgcc.compiler.optimization.level>
@@ -452,6 +464,9 @@
       <Value>../src/ASF/sam/drivers/spi</Value>
       <Value>../src/ASF/sam/drivers/twihs</Value>
       <Value>../src/ASF/common/services/twi</Value>
+      <Value>../src/ASF/sam/drivers/rtc</Value>
+      <Value>../src/ASF/sam/drivers/rtt</Value>
+      <Value>../src/ASF/sam/drivers/tc</Value>
     </ListValues>
   </armgcc.assembler.general.IncludePaths>
   <armgcc.preprocessingassembler.general.AssemblerFlags>-DARM_MATH_CM7=true -DBOARD=SAME70_XPLAINED -D__SAME70Q21B__ -Dprintf=iprintf -Dscanf=iscanf -D__FREERTOS__</armgcc.preprocessingassembler.general.AssemblerFlags>
@@ -492,6 +507,9 @@
       <Value>../src/ASF/sam/drivers/spi</Value>
       <Value>../src/ASF/sam/drivers/twihs</Value>
       <Value>../src/ASF/common/services/twi</Value>
+      <Value>../src/ASF/sam/drivers/rtc</Value>
+      <Value>../src/ASF/sam/drivers/rtt</Value>
+      <Value>../src/ASF/sam/drivers/tc</Value>
     </ListValues>
   </armgcc.preprocessingassembler.general.IncludePaths>
 </ArmGcc>
@@ -512,7 +530,6 @@
       <Value>BOARD=SAME70_XPLAINED</Value>
       <Value>scanf=iscanf</Value>
       <Value>ARM_MATH_CM7=true</Value>
-      <Value>printf=iprintf</Value>
       <Value>LV_CONF_INCLUDE_SIMPLE</Value>
       <Value>__FREERTOS__</Value>
     </ListValues>
@@ -556,6 +573,9 @@
       <Value>../src/ASF/sam/drivers/spi</Value>
       <Value>../src/ASF/sam/drivers/twihs</Value>
       <Value>../src/ASF/common/services/twi</Value>
+      <Value>../src/ASF/sam/drivers/rtc</Value>
+      <Value>../src/ASF/sam/drivers/rtt</Value>
+      <Value>../src/ASF/sam/drivers/tc</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.level>Optimize (-O1)</armgcc.compiler.optimization.level>
@@ -615,6 +635,9 @@
       <Value>../src/ASF/sam/drivers/spi</Value>
       <Value>../src/ASF/sam/drivers/twihs</Value>
       <Value>../src/ASF/common/services/twi</Value>
+      <Value>../src/ASF/sam/drivers/rtc</Value>
+      <Value>../src/ASF/sam/drivers/rtt</Value>
+      <Value>../src/ASF/sam/drivers/tc</Value>
     </ListValues>
   </armgcc.assembler.general.IncludePaths>
   <armgcc.assembler.debugging.DebugLevel>Default (-g)</armgcc.assembler.debugging.DebugLevel>
@@ -656,6 +679,9 @@
       <Value>../src/ASF/sam/drivers/spi</Value>
       <Value>../src/ASF/sam/drivers/twihs</Value>
       <Value>../src/ASF/common/services/twi</Value>
+      <Value>../src/ASF/sam/drivers/rtc</Value>
+      <Value>../src/ASF/sam/drivers/rtt</Value>
+      <Value>../src/ASF/sam/drivers/tc</Value>
     </ListValues>
   </armgcc.preprocessingassembler.general.IncludePaths>
   <armgcc.preprocessingassembler.debugging.DebugLevel>Default (-Wa,-g)</armgcc.preprocessingassembler.debugging.DebugLevel>
@@ -703,7 +729,10 @@
     <Folder Include="src\ASF\sam\drivers\mpu\" />
     <Folder Include="src\ASF\sam\drivers\pio\" />
     <Folder Include="src\ASF\sam\drivers\pmc\" />
+    <Folder Include="src\ASF\sam\drivers\rtc\" />
+    <Folder Include="src\ASF\sam\drivers\rtt\" />
     <Folder Include="src\ASF\sam\drivers\spi\" />
+    <Folder Include="src\ASF\sam\drivers\tc\" />
     <Folder Include="src\ASF\sam\drivers\twihs\" />
     <Folder Include="src\ASF\sam\drivers\uart\" />
     <Folder Include="src\ASF\sam\drivers\usart\" />
@@ -854,9 +883,97 @@
     <Folder Include="src\ASF\thirdparty\lvgl8\tests\unity\" />
     <Folder Include="src\ASF\thirdparty\lvgl8\zephyr\" />
     <Folder Include="src\config\" />
+    <Folder Include="src\imgs" />
     <Folder Include="src\touch\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\dseg20.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\dseg25.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\dseg30.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\dseg35.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\dseg40.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\dseg50.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\acel_img.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\blueimg.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\cancelbtn.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\confirmbtn.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\cronometro.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\desacel_img.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\distimg.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\logoimg.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\not_ready_img.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\playbtn.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\ready_img.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\replaybtn.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\returnbtn.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\stopbtn.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\velintimg.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\wheelbtn.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\imgs\wheelimg.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <None Include="src\ASF\sam\drivers\rtc\rtc.h">
+      <SubType>compile</SubType>
+    </None>
+    <Compile Include="src\ASF\sam\drivers\rtc\rtc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\ASF\sam\drivers\rtt\rtt.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <None Include="src\ASF\sam\drivers\rtt\rtt.h">
+      <SubType>compile</SubType>
+    </None>
+    <Compile Include="src\ASF\sam\drivers\tc\tc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <None Include="src\ASF\sam\drivers\tc\tc.h">
+      <SubType>compile</SubType>
+    </None>
     <Compile Include="src\ASF\thirdparty\lvgl8\examples\anim\lv_example_anim.h">
       <SubType>compile</SubType>
     </Compile>
